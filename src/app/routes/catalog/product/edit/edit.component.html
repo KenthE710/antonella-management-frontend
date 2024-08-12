@@ -1,0 +1,8 @@
+<nz-spin [nzSpinning]="productoIsLoading">
+  <sf #sf mode="edit" [schema]="schema" (formSubmit)="update($event)" (formChange)="formChange()" [button]="submitButtonOption" />
+</nz-spin>
+<nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible = false">
+  <ng-template #modalContent>
+    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+  </ng-template>
+</nz-modal>

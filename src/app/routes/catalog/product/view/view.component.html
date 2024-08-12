@@ -1,0 +1,30 @@
+<nz-spin [nzSpinning]="!producto">
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzSpan="8">
+      <img nz-image class="img-round" width="100%" nzSrc="{{ cover?.url }}" alt="{{ cover?.name }}" />
+    </div>
+    <div nz-col nzSpan="16">
+      <div sv-container [col]="2">
+        <sv [label]="'form.id.label' | i18n">{{ producto?.id }}</sv>
+        <sv [label]="'form.product.name.label' | i18n">{{ producto?.nombre }}</sv>
+        <sv [label]="'form.product.sku.label' | i18n">{{ producto?.sku }}</sv>
+        <sv [label]="'form.product.price.label' | i18n">{{ producto?.precio }}</sv>
+        <sv [label]="'form.product.uses.label' | i18n">{{ producto?.usos_est }}</sv>
+        <sv [label]="'form.product.type.label' | i18n">{{ producto?.tipo?.nombre }}</sv>
+        <sv [label]="'form.product.brand.label' | i18n">{{ producto?.marca?.nombre }}</sv>
+        <sv [label]="'form.product.brand.label' | i18n">{{ producto?.marca?.nombre }}</sv>
+        <sv [label]="'table.product.existencias.label' | i18n">{{ producto?.existencias }}</sv>
+        <sv [label]="'table.product.usos_restantes.label' | i18n">{{ producto?.usos_restantes }}</sv>
+      </div>
+    </div>
+  </div>
+  <nz-divider />
+  <h5 nz-typography>{{ ('view.product.gallery.title' | i18n).concat(': ') }}</h5>
+  <div nz-row>
+    @for (img of imgs; track img.id) {
+      <div nz-col nzSpan="6">
+        <img nz-image width="100%" nzSrc="{{ img.url }}" alt="{{ img.name }}" />
+      </div>
+    }
+  </div>
+</nz-spin>

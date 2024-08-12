@@ -1,0 +1,25 @@
+@if (schema) {
+  <sf
+    #sf
+    [mode]="isEdit ? 'edit' : 'default'"
+    [formData]="productFormData"
+    [schema]="schema"
+    (formSubmit)="formSubmit($event)"
+    (formChange)="formChange()"
+    [button]="submitButtonOption"
+  />
+}
+<ng-template #dropdownRender>
+  <nz-divider />
+  <div class="container">
+    <button nz-button nzType="primary" (click)="productoTipoModal()">
+      <span nz-icon nzType="plus"></span>
+      {{ 'btn.add' | i18n }}
+    </button>
+  </div>
+</ng-template>
+<nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible = false">
+  <ng-template #modalContent>
+    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+  </ng-template>
+</nz-modal>

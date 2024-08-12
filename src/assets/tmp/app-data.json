@@ -1,0 +1,112 @@
+{
+  "app": {
+    "name": "Antonella Management",
+    "description": "Sistema de gestión para la empresa Antonella"
+  },
+  "user": {
+    "name": "Admin",
+    "avatar": "./assets/tmp/img/avatar.jpg",
+    "email": "cipchk@qq.com"
+  },
+  "menu": [
+    {
+      "i18n": "menu.main",
+      "group": true,
+      "hideInBreadcrumb": true,
+      "children": [
+        {
+          "i18n": "menu.dashboard",
+          "link": "/dashboard",
+          "icon": {
+            "type": "icon",
+            "value": "pie-chart"
+          }
+        },
+        {
+          "i18n": "menu.catalog",
+          "group": true,
+          "icon": {
+            "type": "icon",
+            "value": "shop"
+          },
+          "children": [
+            {
+              "i18n": "menu.catalog.product",
+              "link": "/catalog/product",
+              "icon": {
+                "type": "icon",
+                "value": "shopping-cart"
+              }
+            },
+            {
+              "i18n": "menu.catalog.lote",
+              "link": "/catalog/lote",
+              "icon": {
+                "type": "icon",
+                "value": "inbox"
+              }
+            },
+            {
+              "i18n": "menu.catalog.product_type",
+              "link": "/catalog/producto-tipo",
+              "icon": {
+                "type": "icon",
+                "value": "bars"
+              }
+            },
+            {
+              "i18n": "menu.catalog.product_brand",
+              "link": "/catalog/producto-marca",
+              "icon": {
+                "type": "icon",
+                "value": "skin"
+              }
+            }
+          ]
+        },
+        {
+          "i18n": "menu.staff",
+          "link": "/staff/personal",
+          "icon": {
+            "type": "icon",
+            "value": "gf-groups"
+          }
+        },
+        {
+          "i18n": "menu.customers",
+          "link": "/customers",
+          "icon": {
+            "type": "icon",
+            "value": "gf-face"
+          }
+        },
+        {
+          "i18n": "menu.service",
+          "group": true,
+          "icon": {
+            "type": "icon",
+            "value": "gf-health-and-beauty"
+          },
+          "children": [
+            {
+              "i18n": "menu.service",
+              "link": "/service/servicio",
+              "icon": {
+                "type": "icon",
+                "value": "gf-service-toolbox"
+              }
+            },
+            {
+              "i18n": "menu.servicios_realizados",
+              "link": "/service/servicio-realizado",
+              "icon": {
+                "type": "icon",
+                "value": "gf-task-alt"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
