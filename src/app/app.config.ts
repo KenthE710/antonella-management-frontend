@@ -10,7 +10,7 @@ import {
   withHashLocation,
   RouterFeatures
 } from '@angular/router';
-import { I18NService, defaultInterceptor, provideStartup } from '@core';
+import { I18NService, defaultInterceptor, provideStartup, DEFAULT as I18N_DEFAULT, LANGS as I18N_LANGS } from '@core';
 import { provideCellWidgets } from '@delon/abc/cell';
 import { provideSTWidgets } from '@delon/abc/st';
 import { authSimpleInterceptor, provideAuth } from '@delon/auth';
@@ -29,13 +29,7 @@ import { CUSTOM_ICONS } from './shared/icons';
 import { ICONS } from '../style-icons';
 import { ICONS_AUTO } from '../style-icons-auto';
 
-const defaultLang: AlainProvideLang = {
-  abbr: 'en',
-  ng: ngLang,
-  zorro: zorroLang,
-  date: dateLang,
-  delon: delonLang
-};
+const defaultLang: AlainProvideLang = I18N_LANGS[I18N_DEFAULT];
 
 const alainConfig: AlainConfig = {
   auth: { login_url: '/passport/login', token_send_key: 'Authorization', token_send_template: 'Bearer ${token}' },

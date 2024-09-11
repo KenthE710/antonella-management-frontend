@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { I18NService } from '@core';
-import { STColumn, STComponent } from '@delon/abc/st';
+import { STChange, STColumn, STComponent } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
 import { ALAIN_I18N_TOKEN, ModalHelper, _HttpClient } from '@delon/theme';
 import { ProductService } from '@service/inventory/product/producto.service';
@@ -36,14 +36,15 @@ export class CatalogProductComponent implements OnInit {
     }
   };
   columns: STColumn[] = [
-    { title: 'No', type: 'no' },
+    { title: 'No', type: 'number', index: 'row_number' },
     {
       title: {
         i18n: 'table.product.cover.label'
       },
       type: 'img',
       width: 100,
-      index: 'cover'
+      index: 'cover',
+      exported: false
     },
     {
       title: {
@@ -51,10 +52,7 @@ export class CatalogProductComponent implements OnInit {
       },
       index: 'nombre',
       filter: {
-        type: 'keyword',
-        fn: (filter, record) => {
-          return record.nombre.toLowerCase().includes(filter.text?.toLowerCase());
-        }
+        type: 'keyword'
       }
     },
     {
@@ -63,17 +61,17 @@ export class CatalogProductComponent implements OnInit {
       },
       index: 'sku',
       filter: {
-        type: 'keyword',
-        fn: (filter, record) => {
-          return record.sku.toLowerCase().includes(filter.text?.toLowerCase());
-        }
+        type: 'keyword'
       }
     },
     {
       title: {
         i18n: 'table.product.type.label'
       },
-      index: 'tipo'
+      index: 'tipo',
+      filter: {
+        type: 'keyword'
+      }
     },
     {
       title: {
@@ -87,10 +85,10 @@ export class CatalogProductComponent implements OnInit {
       },
       filter: {
         menus: [
-          { text: this.i18n.getI18Value('table.product.has_stock.badge.dont_have_stock.label'), value: 0 },
-          { text: this.i18n.getI18Value('table.product.has_stock.badge.have_stock.label'), value: 1 }
+          { text: this.i18n.getI18Value('table.product.has_stock.badge.dont_have_stock.label'), value: false },
+          { text: this.i18n.getI18Value('table.product.has_stock.badge.have_stock.label'), value: true }
         ],
-        fn: (filter, record) => record.status === filter
+        multiple: false
       }
     }
     /* {
@@ -131,6 +129,12 @@ export class CatalogProductComponent implements OnInit {
 
   get url() {
     return BACKEND_API.inventory.product.grid.url();
+  }
+
+  export() {
+    this.st.filteredData.subscribe(data => {
+      this.st.export(data);
+    });
   }
 
   ngOnInit(): void {

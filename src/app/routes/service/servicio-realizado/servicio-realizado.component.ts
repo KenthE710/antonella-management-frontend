@@ -3,15 +3,12 @@ import { I18NService } from '@core';
 import { STColumn, STComponent } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
 import { ALAIN_I18N_TOKEN, ModalHelper, _HttpClient } from '@delon/theme';
-import { IServicio } from '@service/services/schemas/servicio.schema';
-import { ServicioService } from '@service/services/servicio.service';
+import { IServicioRealizadoAll } from '@service/services/schemas/servicio_realizado.schema';
 import { ServicioRealizadoService } from '@service/services/servicio_realizado.service';
-import { convertirDuracionAFecha, formatErrorMsg, SHARED_IMPORTS } from '@shared';
+import { formatErrorMsg, SHARED_IMPORTS } from '@shared';
 import { BACKEND_API } from '@shared/constant';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ServicioRealizadoFormComponent } from 'src/app/forms/services/servicio_realizado.form';
 
-import { ServicioRealizadoEditFormComponent } from './edit.component';
 import { ServicioRealizadoViewComponent } from './view.component';
 
 @Component({
@@ -20,7 +17,14 @@ import { ServicioRealizadoViewComponent } from './view.component';
   imports: [...SHARED_IMPORTS],
   template: `
     <page-header />
-    <st #st [data]="url" [columns]="columns" />
+    <nz-card [nzBordered]="false">
+      <div class="an-btn-filter-container">
+        <button nz-button nzType="primary" (click)="export()">{{ 'btn.Export' | i18n }}</button>
+        <button nz-button nzType="default" (click)="st.reset()">{{ 'btn.filter.reset' | i18n }}</button>
+      </div>
+
+      <st #st [data]="url" [columns]="columns" responsiveHideHeaderFooter />
+    </nz-card>
   `
 })
 export class ServicioRealizadoTableComponent {
@@ -40,27 +44,56 @@ export class ServicioRealizadoTableComponent {
     }
   };
   columns: STColumn[] = [
-    { title: 'No', type: 'no' },
+    //{ title: '', index: 'id.value', type: 'checkbox' },
+    { title: 'No', type: 'number', index: 'row_number', className: 'text-center', width: 'fit-conent' },
     {
       title: this.i18n.getI18Value('form.servicio_realizado.servicio.label'),
       index: 'servicio',
       format(item, col, index) {
         return item.servicio.nombre;
-      }
+      },
+      filter: { type: 'keyword' }
     },
     {
       title: this.i18n.getI18Value('form.servicio_realizado.client.label'),
       index: 'cliente',
       format(item, col, index) {
-        return `${item.cliente.nombre} - ${item.cliente.apellido}`;
+        return `${item.cliente.nombre} ${item.cliente.apellido}`;
+      },
+      filter: { type: 'keyword' }
+    },
+    {
+      title: {
+        i18n: 'form.servicio_realizado.date.label'
+      },
+      index: 'fecha',
+      type: 'date',
+      filter: {
+        type: 'date',
+        date: {
+          range: true
+        },
+        reName(list, col) {
+          if (list.length === 0 || !Array.isArray(list[0].value) || list[0].value.length < 2) return {};
+          const value: Date[] = list[0].value;
+
+          return { fecha_inicio: value[0].toISOString(), fecha_fin: value[1].toISOString() };
+        }
       }
     },
-    { title: this.i18n.getI18Value('form.servicio_realizado.date.label'), index: 'fecha', type: 'date' },
     {
       title: this.i18n.getI18Value('form.servicio_realizado.paid.label'),
       index: 'pagado',
       type: 'currency',
-      currency: { format: { ngCurrency: { display: 'symbol', currencyCode: 'USD' } } }
+      currency: { format: { ngCurrency: { display: 'symbol', currencyCode: 'USD' } } },
+      filter: {
+        type: 'number',
+        placeholder: this.i18n.getI18Value('form.lote.cost.label'),
+        number: {
+          min: 0,
+          precision: 2
+        }
+      }
     },
     {
       title: this.i18n.getI18Value('form.servicio_realizado.finish.label'),
@@ -75,11 +108,70 @@ export class ServicioRealizadoTableComponent {
           text: this.i18n.getI18Value('form.servicio_realizado.finish.no.label'),
           color: 'error'
         }
+      },
+      filter: {
+        multiple: false,
+        menus: [
+          { text: this.i18n.getI18Value('form.servicio_realizado.finish.yes.label'), value: true },
+          { text: this.i18n.getI18Value('form.servicio_realizado.finish.no.label'), value: false }
+        ]
       }
     },
     {
       title: this.i18n.getI18Value('table.column.accion'),
       buttons: [
+        {
+          icon: 'close-circle',
+          type: 'del',
+          iif: rec => rec.finalizado,
+          pop: {
+            title: this.i18n.getI18Value('popup.servicio_realizado.change_state.unfinish'),
+            okType: 'primary',
+            icon: 'warning'
+          },
+          click: (record: IServicioRealizadoAll, _modal, comp) => {
+            this.st.loading = true;
+            this.ServicioRealizadoService.update_finalizado_batch(false, [record.id]).subscribe({
+              complete: () => {
+                this.msg.success(this.i18n.getI18Value('table.notification.servicio_realizado.change_state.unfinish'));
+                this.st.loading = false;
+                comp!.reload();
+              },
+              error: err => {
+                this.msg.error(
+                  formatErrorMsg(this.i18n.getI18Value('table.notification.servicio_realizado.change_state.unfinish.error'), err)
+                );
+                this.st.loading = false;
+              }
+            });
+          }
+        },
+        {
+          icon: 'check-circle',
+          type: 'del',
+          iif: rec => !rec.finalizado,
+          pop: {
+            title: this.i18n.getI18Value('popup.servicio_realizado.change_state.finish'),
+            okType: 'primary',
+            icon: 'warning'
+          },
+          click: (record: IServicioRealizadoAll, _modal, comp) => {
+            this.st.loading = true;
+            this.ServicioRealizadoService.update_finalizado_batch(true, [record.id]).subscribe({
+              complete: () => {
+                this.msg.success(this.i18n.getI18Value('table.notification.servicio_realizado.change_state.finish'));
+                this.st.loading = false;
+                comp!.reload();
+              },
+              error: err => {
+                this.msg.error(
+                  formatErrorMsg(this.i18n.getI18Value('table.notification.servicio_realizado.change_state.finish.error'), err)
+                );
+                this.st.loading = false;
+              }
+            });
+          }
+        },
         {
           icon: 'eye',
           type: 'modal',
@@ -101,47 +193,35 @@ export class ServicioRealizadoTableComponent {
             okType: 'danger',
             icon: 'warning'
           },
-          click: (record: IServicio, _modal, comp) => {
+          click: (record: IServicioRealizadoAll, _modal, comp) => {
             this.st.loading = true;
             this.ServicioRealizadoService.delete(record.id).subscribe({
               complete: () => {
-                this.msg.success(this.i18n.getI18ValueTemplate('table.notification.row.deleted', record.nombre));
+                this.msg.success(this.i18n.getI18ValueTemplate('table.notification.row.deleted', record.servicio.nombre));
                 this.st.loading = false;
                 comp!.removeRow(record);
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.nombre), err));
+                this.msg.error(
+                  formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.servicio.nombre), err)
+                );
                 this.st.loading = false;
               }
             });
           }
         }
-        /* {
-          icon: 'edit',
-          type: 'drawer',
-          drawer: {
-            component: ServicioRealizadoEditFormComponent,
-            drawerOptions: {
-              nzTitle: this.i18n.getI18Value('drawer.servicio.title'),
-              nzWidth: '35%',
-              nzOnCancel: async () => {
-                this.st.reload();
-              }
-            },
-            params: rec => ({
-              id: rec.id,
-              onUpdated: () => {
-                this.st.reload();
-              }
-            })
-          }
-        } */
       ]
     }
   ];
 
   get url() {
     return BACKEND_API.services.servicio_realizado.grid.url();
+  }
+
+  export() {
+    this.st.filteredData.subscribe(data => {
+      this.st.export(data);
+    });
   }
 }

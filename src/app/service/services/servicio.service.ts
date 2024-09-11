@@ -12,7 +12,11 @@ import {
   ServicioSchema,
   NoIdServicioSchema,
   IServicioSelector,
-  ServicioSelectorSchema
+  ServicioSelectorSchema,
+  IServicioState,
+  ServicioStateSchema,
+  IServicioView,
+  ServicioViewSchema
 } from './schemas/servicio.schema';
 
 @Injectable({
@@ -35,7 +39,7 @@ export class ServicioService {
     return this.http.get<IServicio>(BACKEND_API.services.servicio.url(id)).pipe(
       serviceDefault({
         schema: ServicioSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.individual.get.error'),
         logger: this.logger
       })
     );
@@ -43,7 +47,7 @@ export class ServicioService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(BACKEND_API.services.servicio.url(id)).pipe(
       serviceDefault({
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.delete.error'),
         logger: this.logger
       })
     );
@@ -53,7 +57,7 @@ export class ServicioService {
     return this.http.post<IServicio>(BACKEND_API.services.servicio.url(), servicio).pipe(
       serviceDefault({
         schema: ServicioSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.create.error'),
         logger: this.logger
       })
     );
@@ -63,7 +67,7 @@ export class ServicioService {
     return this.http.patch<IServicio>(BACKEND_API.services.servicio.url(id), servicio).pipe(
       serviceDefault({
         schema: ServicioSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.update.error'),
         logger: this.logger
       })
     );
@@ -79,7 +83,33 @@ export class ServicioService {
     return this.http.get<IServicioSelector[]>(BACKEND_API.services.servicio.selector.url()).pipe(
       serviceDefault({
         schema: ServicioSelectorSchema.array(),
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.get.selector.error'),
+        logger: this.logger
+      })
+    );
+  }
+  getStates(): Observable<IServicioState[]> {
+    return this.http.get<IServicioState[]>(BACKEND_API.services.servicio.state.url()).pipe(
+      serviceDefault({
+        schema: ServicioStateSchema.array(),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.get.states.error'),
+        logger: this.logger
+      })
+    );
+  }
+  delete_batch(ids: number[]): Observable<void> {
+    return this.http.post<void>(BACKEND_API.services.servicio.delete_batch.url(), { ids }).pipe(
+      serviceDefault({
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.delete_batch.error'),
+        logger: this.logger
+      })
+    );
+  }
+  view(id: number): Observable<IServicioView> {
+    return this.http.get<IServicioView>(BACKEND_API.services.servicio.view.url(id)).pipe(
+      serviceDefault({
+        schema: ServicioViewSchema,
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.view.error'),
         logger: this.logger
       })
     );

@@ -36,9 +36,21 @@ export class CatalogProductoTipoComponent {
     }
   };
   columns: STColumn[] = [
-    { title: 'No', type: 'no' },
-    { title: this.i18n.getI18Value('table.product_type.name.label'), index: 'nombre' },
-    { title: this.i18n.getI18Value('table.product_type.description.label'), index: 'descripcion' },
+    { title: 'No', type: 'number', index: 'row_number' },
+    {
+      title: this.i18n.getI18Value('table.product_type.name.label'),
+      index: 'nombre',
+      filter: {
+        type: 'keyword'
+      }
+    },
+    {
+      title: this.i18n.getI18Value('table.product_type.description.label'),
+      index: 'descripcion',
+      filter: {
+        type: 'keyword'
+      }
+    },
     {
       title: this.i18n.getI18Value('table.column.accion'),
       buttons: [
@@ -95,7 +107,7 @@ export class CatalogProductoTipoComponent {
   }
   add(): void {
     this.modal
-      .createStatic(
+      .create(
         AddProductoTipoFormComponent,
         {
           onProductoTipoCreated: () => {
@@ -109,5 +121,11 @@ export class CatalogProductoTipoComponent {
         }
       )
       .subscribe();
+  }
+
+  export() {
+    this.st.filteredData.subscribe(data => {
+      this.st.export(data);
+    });
   }
 }

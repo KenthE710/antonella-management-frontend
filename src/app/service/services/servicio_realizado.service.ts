@@ -34,7 +34,7 @@ export class ServicioRealizadoService {
     return this.http.get<IServicioRealizado>(BACKEND_API.services.servicio_realizado.url(id)).pipe(
       serviceDefault({
         schema: ServicioRealizadoSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio_realizado.get.error'),
         logger: this.logger
       })
     );
@@ -43,7 +43,7 @@ export class ServicioRealizadoService {
     return this.http.get<IServicioRealizadoAll>(BACKEND_API.services.servicio_realizado.complete.url(id)).pipe(
       serviceDefault({
         schema: ServicioRealizadoAllSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio_realizado.get.error'),
         logger: this.logger
       })
     );
@@ -53,7 +53,7 @@ export class ServicioRealizadoService {
     return this.http.post<IServicioRealizado>(BACKEND_API.services.servicio_realizado.url(), servicioRealizado).pipe(
       serviceDefault({
         schema: ServicioRealizadoSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio_realizado.create.error'),
         logger: this.logger
       })
     );
@@ -61,7 +61,23 @@ export class ServicioRealizadoService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(BACKEND_API.services.servicio_realizado.url(id)).pipe(
       serviceDefault({
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio_realizado.delete.error'),
+        logger: this.logger
+      })
+    );
+  }
+
+  /**
+   * ========================================
+   * OPERACIONES
+   * ========================================
+   */
+  update_finalizado_batch(finalizado: boolean, ids: number[]): Observable<void> {
+    if (!ids.length) throw new Error(this.i18n.getI18Value('services.servicio_realizado.update_finalizado_batch.error'));
+
+    return this.http.post<void>(BACKEND_API.services.servicio_realizado.update_finalizado_batch.url(), { finalizado, ids }).pipe(
+      serviceDefault({
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio_realizado.update_finalizado_batch.error'),
         logger: this.logger
       })
     );

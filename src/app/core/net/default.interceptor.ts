@@ -1,7 +1,8 @@
-import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponseBase } from '@angular/common/http';
+import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { Injector, inject } from '@angular/core';
-import { IGNORE_BASE_URL, _HttpClient } from '@delon/theme';
+import { CUSTOM_ERROR, IGNORE_BASE_URL, RAW_BODY, _HttpClient } from '@delon/theme';
 import { environment } from '@env/environment';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, of, throwError, mergeMap, catchError } from 'rxjs';
 
 import { ReThrowHttpError, checkStatus, getAdditionalHeaders, toLogin } from './helper';
@@ -24,15 +25,15 @@ function handleData(injector: Injector, ev: HttpResponseBase, req: HttpRequest<a
       //   if (body && body.status !== 0) {
       //     const customError = req.context.get(CUSTOM_ERROR);
       //     if (customError) injector.get(NzMessageService).error(body.msg);
-      //     return customError ? throwError(() => ({ body, _throw: true }) as ReThrowHttpError) : of({});
+      //     return customError ? throwError(() => ({ body, _throw: false }) as ReThrowHttpError) : of({});
       //   } else {
-      //     Devolver el cuerpo de la respuesta original
+      //     // Devolver el cuerpo de la respuesta original
       //     if (req.context.get(RAW_BODY) || ev.body instanceof Blob) {
       //       return of(ev);
       //     }
-      //     Modificar el contenido de body a response, en la mayoría de los casos no es necesario preocuparse por el código de estado del negocio
-      //     return of(new HttpResponse({ ...ev, body: body.response } as any));
-      //     O mantener el formato completo
+      //     // Modificar el contenido de body a response, en la mayoría de los casos no es necesario preocuparse por el código de estado del negocio
+      //     // return of(new HttpResponse({ ...ev, body: body.response } as any));
+      //     // O mantener el formato completo
       //     return of(ev);
       //   }
       // }

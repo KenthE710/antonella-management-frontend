@@ -95,14 +95,30 @@ export class StartupService {
     // mock
     const app: any = {
       name: `Antonella Management`,
-      description: `Sistema de gestión para la empresa Antonella`
+      description: `Sistema de gestión para la empresa Antonella`,
+      validations: {
+        cedula_limit: 10,
+        mobile_limit: 10
+      },
+      dashboard: {
+        periodo_inicial: 'month',
+        servicios_mas_realizados: {
+          limit: 5
+        },
+        productos_mas_utilizados: {
+          limit: 5
+        },
+        rendimiento_servicios_productos: {
+          limit: 5
+        }
+      }
     };
-    const user: any = {
+    /* const user: any = {
       name: 'Admin',
       avatar: './assets/tmp/img/avatar.jpg',
       email: 'admin@antonella.com',
       token: '123456789'
-    };
+    }; */
     // Application information: including site name, description, year
     this.settingService.setApp(app);
     // User information: including name, avatar, email address

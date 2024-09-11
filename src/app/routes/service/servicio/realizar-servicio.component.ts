@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { I18NService } from '@core';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { ServicioRealizadoFormComponent } from '@forms';
@@ -14,9 +14,9 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
   selector: 'realizar-servicio-form',
   imports: [ServicioRealizadoFormComponent],
   standalone: true,
-  template: `<servicio-realizado-form [formData]="realizarServicioData" (submit)="submit($event)" />`
+  template: `<servicio-realizado-form [formData]="_data" (submit)="submit($event)" />`
 })
-export class RealizarServicioFormComponent {
+export class RealizarServicioFormComponent implements OnInit {
   private readonly modal = inject(NzModalRef);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly msg = inject(NzMessageService);
@@ -26,18 +26,14 @@ export class RealizarServicioFormComponent {
 
   _data?: any;
 
-  get realizarServicioData() {
-    if (!this.data) return;
-
-    if (!this._data) {
+  ngOnInit(): void {
+    if (this.data) {
       this._data = {
         servicio: this.data?.id,
         // TODO: evitar que tener que usar any
         productos: (this.data?.productos as any[])?.map(p => ({ producto: p.id, cantidad: 1 }))
       };
     }
-
-    return this._data;
   }
 
   submit(servicio: IBaseServicioRealizado) {

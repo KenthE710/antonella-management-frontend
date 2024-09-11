@@ -1,7 +1,11 @@
 import { environment } from '@env/environment';
 import { ZodError } from 'zod';
 
-export function formatErrorMsg(msg: string, error: Error): string {
+export function formatErrorMsg(msg: string, error: Error | string): string {
+  if (typeof error === 'string') {
+    return `${msg}: ${error}`;
+  }
+
   if (error.message && !environment.production) {
     if (error instanceof ZodError) {
       return `${msg}: \n`.concat(

@@ -1,7 +1,7 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, inject, Input, Output, EventEmitter, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { I18NService } from '@core';
-import { SFButton, SFComponent, SFNumberWidgetSchema, SFSchema, SFSelectWidgetSchema } from '@delon/form';
+import { SFButton, SFComponent, SFLayout, SFNumberWidgetSchema, SFSchema, SFSelectWidgetSchema } from '@delon/form';
 import type { SFUploadWidgetSchema } from '@delon/form/widgets/upload';
 import { ALAIN_I18N_TOKEN, ModalHelper } from '@delon/theme';
 import { environment } from '@env/environment';
@@ -56,14 +56,15 @@ export class ProductFormComponent implements OnInit {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
 
   @Input() productFormData: ProductFormData | undefined;
+  @Input() productoCoverFileList: Array<NzUploadFile<ISingleProductoImg>> = [];
+  @Input() productoFileList: Array<NzUploadFile<ISingleProductoImg>> = [];
   @Output() readonly CreateOrUpdateFinish = new EventEmitter<Partial<IProducto>>();
 
   @ViewChild('sf', { static: false }) private readonly sf!: SFComponent;
   @ViewChild('dropdownRender', { static: true }) private dropdownRender!: TemplateRef<void>;
 
+  layout: SFLayout = 'horizontal';
   producto?: IProducto;
-  productoCoverFileList: Array<NzUploadFile<ISingleProductoImg>> = [];
-  productoFileList: Array<NzUploadFile<ISingleProductoImg>> = [];
   previewImage: string = '';
   previewVisible = false;
   formHasChange = false;
@@ -97,6 +98,10 @@ export class ProductFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.productFormData) {
+      this.layout = 'vertical';
+    }
+
     this.schema = {
       properties: {
         tipo: {
@@ -199,9 +204,6 @@ export class ProductFormComponent implements OnInit {
             }
           } as SFUploadWidgetSchema
         }
-      },
-      ui: {
-        spanLabel: 8
       }
     };
 

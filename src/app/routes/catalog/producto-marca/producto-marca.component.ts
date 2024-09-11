@@ -22,7 +22,15 @@ import { EditProductoMarcaFormComponent } from './edit/edit.component';
         <button (click)="add()" nz-button nzType="primary">{{ 'btn.add' | i18n }}</button>
       </ng-template>
     </page-header>
-    <st #st [data]="url" [columns]="columns" />
+
+    <nz-card [nzBordered]="false">
+      <div class="an-btn-filter-container">
+        <button nz-button (click)="export()">{{ 'btn.Export' | i18n }}</button>
+        <button nz-button nzType="dashed" (click)="st.reset()">{{ 'btn.filter.reset' | i18n }}</button>
+      </div>
+
+      <st #st [data]="url" [columns]="columns" responsiveHideHeaderFooter />
+    </nz-card>
   `
 })
 export class ProductoMarcaTableComponent {
@@ -42,8 +50,8 @@ export class ProductoMarcaTableComponent {
     }
   };
   columns: STColumn[] = [
-    { title: 'No', type: 'no' },
-    { title: this.i18n.getI18Value('table.product_brand.name.label'), index: 'nombre' },
+    { title: 'No', type: 'number', index: 'row_number' },
+    { title: this.i18n.getI18Value('table.product_brand.name.label'), index: 'nombre', filter: { type: 'keyword' } },
     {
       title: this.i18n.getI18Value('table.column.accion'),
       buttons: [
@@ -100,7 +108,7 @@ export class ProductoMarcaTableComponent {
   }
   add(): void {
     this.modal
-      .createStatic(
+      .create(
         AddProductoMarcaFormComponent,
         {
           onCreated: () => {
@@ -114,5 +122,11 @@ export class ProductoMarcaTableComponent {
         }
       )
       .subscribe();
+  }
+
+  export() {
+    this.st.filteredData.subscribe(data => {
+      this.st.export(data);
+    });
   }
 }

@@ -11,6 +11,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { AddPersonalFormComponent } from './add.component';
 import { EditPersonalFormComponent } from './edit.component';
+import { ViewPersonalComponent } from './view.component';
 
 @Component({
   selector: 'personal-table',
@@ -22,7 +23,15 @@ import { EditPersonalFormComponent } from './edit.component';
         <button (click)="add()" nz-button nzType="primary">{{ 'btn.add' | i18n }}</button>
       </ng-template>
     </page-header>
-    <st #st [data]="url" [columns]="columns" />
+
+    <nz-card [nzBordered]="false">
+      <div class="an-btn-filter-container">
+        <button nz-button (click)="export()">{{ 'btn.Export' | i18n }}</button>
+        <button nz-button nzType="dashed" (click)="st.reset()">{{ 'btn.filter.reset' | i18n }}</button>
+      </div>
+
+      <st #st [data]="url" [columns]="columns" responsiveHideHeaderFooter />
+    </nz-card>
   `
 })
 export class PersonalTableComponent {
@@ -42,13 +51,57 @@ export class PersonalTableComponent {
     }
   };
   columns: STColumn[] = [
-    { title: 'No', type: 'no' },
-    { title: this.i18n.getI18Value('table.staff.nombre.label'), index: 'nombre' },
-    { title: this.i18n.getI18Value('table.staff.apellido.label'), index: 'apellido' },
-    { title: this.i18n.getI18Value('table.staff.cedula.label'), index: 'cedula' },
+    { title: 'No', type: 'number', index: 'row_number' },
+    { title: this.i18n.getI18Value('table.staff.cedula.label'), index: 'cedula', filter: { type: 'keyword' } },
+    {
+      title: this.i18n.getI18Value('table.staff.nombre.label'),
+      format(item, col, index) {
+        return `${item.nombre} ${item.apellido}`;
+      },
+      filter: { type: 'keyword' }
+    },
+    { title: this.i18n.getI18Value('table.staff.email.label'), index: 'email', filter: { type: 'keyword' } },
+    {
+      title: {
+        i18n: 'table.staff.state.label'
+      },
+      index: 'estado.name',
+      type: 'badge',
+      badge: {
+        ACTIVO: { text: this.i18n.getI18Value('form.staff.state.badge.active.label'), color: 'success' },
+        INACTIVO: { text: this.i18n.getI18Value('form.staff.state.badge.inactive.label'), color: 'error' }
+      },
+      filter: {
+        menus: [
+          { text: this.i18n.getI18Value('form.staff.state.badge.active.label'), value: 'ACTIVO' },
+          { text: this.i18n.getI18Value('form.staff.state.badge.inactive.label'), value: 'INACTIVO' }
+        ],
+        reName(list, col) {
+          return {
+            state: list
+              .filter(w => w.checked)
+              .map(item => item.value)
+              .join(',')
+          };
+        }
+      }
+    },
     {
       title: this.i18n.getI18Value('table.column.accion'),
       buttons: [
+        {
+          icon: 'eye',
+          type: 'modal',
+          modal: {
+            component: ViewPersonalComponent,
+            modalOptions: {
+              nzTitle: this.i18n.getI18Value('modal.staff.view.title')
+            },
+            params: rec => ({
+              id: rec.id
+            })
+          }
+        },
         {
           icon: 'edit',
           type: 'drawer',
@@ -81,13 +134,18 @@ export class PersonalTableComponent {
             this.st.loading = true;
             this.personalService.delete(record.id).subscribe({
               complete: () => {
-                this.msg.success(this.i18n.getI18ValueTemplate('table.notification.row.deleted', ''));
+                this.msg.success(this.i18n.getI18ValueTemplate('table.notification.row.deleted', `${record.nombre} ${record.apellido}`));
                 this.st.loading = false;
                 comp!.removeRow(record);
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', ''), err));
+                this.msg.error(
+                  formatErrorMsg(
+                    this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', `${record.nombre} ${record.apellido}`),
+                    err
+                  )
+                );
                 this.st.loading = false;
               }
             });
@@ -102,7 +160,7 @@ export class PersonalTableComponent {
   }
   add(): void {
     this.modal
-      .createStatic(
+      .create(
         AddPersonalFormComponent,
         {
           onCreated: () => {
@@ -116,5 +174,11 @@ export class PersonalTableComponent {
         }
       )
       .subscribe();
+  }
+
+  export() {
+    this.st.filteredData.subscribe(data => {
+      this.st.export(data);
+    });
   }
 }

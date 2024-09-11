@@ -7,7 +7,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 export interface ReThrowHttpError {
   body: any;
-  _throw: true;
+  _throw: boolean;
 }
 
 export const CODEMESSAGE: { [key: number]: string } = {
@@ -56,7 +56,7 @@ export function getAdditionalHeaders(headers?: HttpHeaders): { [name: string]: s
 }
 
 export function checkStatus(injector: Injector, ev: HttpResponseBase): void {
-  if ((ev.status >= 200 && ev.status < 300) || ev.status === 401) {
+  if ((ev.status >= 200 && ev.status < 300) || ev.status === 400 || ev.status === 401) {
     return;
   }
 

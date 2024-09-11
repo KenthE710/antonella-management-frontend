@@ -1,49 +1,24 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { I18NService } from '@core';
-import { SVModule } from '@delon/abc/sv';
 import { ALAIN_I18N_TOKEN, I18nPipe } from '@delon/theme';
-import { ProductService } from '@service/inventory/product/producto.service';
-import { IProductoAll, ISingleProductoImg } from '@service/inventory/product/schemas';
 import { IServicioRealizadoAll } from '@service/services/schemas/servicio_realizado.schema';
 import { ServicioRealizadoService } from '@service/services/servicio_realizado.service';
-import { formatErrorMsg } from '@shared';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzImageModule } from 'ng-zorro-antd/image';
+import { formatDateFromString, formatErrorMsg, relativeDateToNowFromString, SHARED_IMPORTS } from '@shared';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzTypographyModule } from 'ng-zorro-antd/typography';
-import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'servicio-realizado-view',
   standalone: true,
-  imports: [
-    SVModule,
-    NzButtonModule,
-    NzRadioModule,
-    NzToolTipModule,
-    FormsModule,
-    NzSpinModule,
-    NzDividerModule,
-    NzImageModule,
-    NzGridModule,
-    NzTypographyModule,
-    I18nPipe
-  ],
+  imports: [...SHARED_IMPORTS],
   template: `
-    <nz-spin [nzSpinning]="!servicioRealizado">
+    @if (servicioRealizado) {
       <div sv-container [col]="2">
         <sv [label]="'form.id.label' | i18n">{{ servicioRealizado!.id }}</sv>
         <sv [label]="'Cliente'">{{
           servicioRealizado!.cliente ? servicioRealizado!.cliente.nombre.concat(' ').concat(servicioRealizado!.cliente.apellido) : ''
         }}</sv>
         <sv [label]="'Servicio'">{{ servicioRealizado!.servicio ? servicioRealizado!.servicio.nombre : '' }}</sv>
-        <sv [label]="'Fecha'">{{ servicioRealizado!.fecha }}</sv>
+        <sv [label]="'Fecha'" *ngIf="servicioRealizado.fecha">{{ formatDate(servicioRealizado.fecha) }}</sv>
         <sv [label]="'Pagado'" unit="$">{{ servicioRealizado!.pagado }}</sv>
         <sv [label]="'Finalizado'">{{ servicioRealizado!.finalizado }}</sv>
         <nz-divider />
@@ -55,15 +30,15 @@ import { combineLatest, map } from 'rxjs';
                   .concat(prod.cantidad.toString())
                   .concat(' unidad/es del producto: ')
                   .concat(prod.producto.nombre)
-                  .concat(' (')
-                  .concat(prod.producto.sku)
-                  .concat(')')
+                  .concat(prod.producto.sku ? ''.concat(' (', prod.producto.sku, ')') : '')
               }}
             </p>
           }
         </sv>
       </div>
-    </nz-spin>
+    } @else {
+      <nz-spin />
+    }
   `,
   styles: `
     .img-round {
@@ -95,5 +70,17 @@ export class ServicioRealizadoViewComponent implements OnInit {
         this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.servicio_realizado.individual.get.error'), err));
       }
     });
+  }
+
+  formatDate(date?: string | null): string {
+    try {
+      if (!date) return '';
+      const formatDate = formatDateFromString(date);
+      const relativeFormatDate = relativeDateToNowFromString(date, this.i18n.getDateLocale());
+
+      return `${formatDate} (${relativeFormatDate})`;
+    } catch (error) {
+      return '';
+    }
   }
 }

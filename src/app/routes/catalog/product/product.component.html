@@ -1,8 +1,17 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
-    <button (click)="add()" nz-button nzType="primary">{{ 'btn.add' | i18n }}</button>
+    <button (click)="add()" nz-button nzType="primary">
+      <i nz-icon nzType="plus"></i>
+      <span>{{ 'btn.add' | i18n }}</span>
+    </button>
   </ng-template>
 </page-header>
 
+<nz-card [nzBordered]="false">
+  <div class="an-btn-filter-container">
+    <button nz-button (click)="export()">{{ 'btn.Export' | i18n }}</button>
+    <button nz-button nzType="dashed" (click)="st.reset()">{{ 'btn.filter.reset' | i18n }}</button>
+  </div>
+  <st #st [data]="url" [columns]="columns" [total]="true" [loading]="table_loading" responsiveHideHeaderFooter />
+</nz-card>
 <!-- <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)" /> -->
-<st #st [data]="url" [columns]="columns" [total]="true" [loading]="table_loading" responsiveHideHeaderFooter />

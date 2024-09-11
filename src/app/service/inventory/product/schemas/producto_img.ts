@@ -9,9 +9,9 @@ import { z } from 'zod';
 
 const _ProductoImgSchema = {
   id: z.number(),
-  producto: z.number().optional(),
-  imagen: z.string().or(z.null()).optional(),
-  url_imagen_externa: z.string().optional(),
+  producto: z.number().nullable().optional(),
+  imagen: z.string().nullable().optional(),
+  url_imagen_externa: z.string().nullable().optional(),
   is_cover: z.boolean(),
   is_temp: z.boolean()
 };
@@ -22,7 +22,7 @@ export const SingleProductoImgSchema = z.object({
   id: z.number(),
   is_cover: z.boolean(),
   url: z.string(),
-  name: z.string().or(z.null())
+  name: z.string().nullable()
 });
 export type ISingleProductoImg = z.infer<typeof SingleProductoImgSchema>;
 

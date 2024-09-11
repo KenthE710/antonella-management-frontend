@@ -7,7 +7,8 @@ import {
   SFSelectWidgetSchema,
   SFSchemaEnum,
   SFComponent,
-  SFArrayWidgetSchema
+  SFArrayWidgetSchema,
+  SFLayout
 } from '@delon/form';
 import { SFTimeWidgetSchema } from '@delon/form/widgets/time';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
@@ -24,16 +25,9 @@ import { delay, lastValueFrom, map, switchMap, tap, toArray } from 'rxjs';
   selector: 'servicio-realizado-form',
   standalone: true,
   imports: [DelonFormModule],
-  template: ` <sf
-    #sf
-    [schema]="schema"
-    [mode]="formData ? 'edit' : 'default'"
-    [formData]="data"
-    (formSubmit)="formSubmit($event)"
-    [loading]="!!itemsloading"
-  />`
+  template: ` <sf #sf [schema]="schema" [formData]="data" (formSubmit)="formSubmit($event)" [loading]="!!itemsloading" [layout]="layout" />`
 })
-export class ServicioRealizadoFormComponent {
+export class ServicioRealizadoFormComponent implements OnInit {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly servicioService = inject(ServicioService);
   private readonly clienteService = inject(ClienteService);
@@ -48,6 +42,8 @@ export class ServicioRealizadoFormComponent {
   itemsloading = 0;
   productos: Array<{ producto: number; cantidad: number }> = [];
 
+  layout: SFLayout = 'horizontal';
+
   schema: SFSchema = {
     properties: {
       servicio: {
@@ -61,7 +57,7 @@ export class ServicioRealizadoFormComponent {
               this.itemsloading--;
               //this.productos = service.productos.map(p => ({ producto: p, cantidad: 1 }));
               this.sf.getProperty('/productos')!.setValue(
-                service.productos.map(p => ({ producto: p, cantidad: 1 })),
+                service.productos?.map(p => ({ producto: p, cantidad: 1 })),
                 false
               );
             });
@@ -139,11 +135,18 @@ export class ServicioRealizadoFormComponent {
     return this.formData;
   }
 
+  ngOnInit(): void {
+    if (this.formData) {
+      this.layout = 'vertical';
+    }
+  }
+
   formSubmit(values: any) {
-    const data: IBaseServicioRealizado = {
-      ...values,
-      pagado: String(values.pagado)
-    };
+    const data: IBaseServicioRealizado = values;
+
+    if (values.pagado) {
+      data['pagado'] = String(values.pagado);
+    }
 
     this.submit.emit(data);
   }

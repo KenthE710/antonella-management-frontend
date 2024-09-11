@@ -7,7 +7,19 @@ import {
   WarningOutline,
   PieChartOutline,
   SkinOutline,
-  ContainerOutline
+  ContainerOutline,
+  CheckCircleOutline,
+  CloseCircleOutline
 } from '@ant-design/icons-angular/icons';
 
-export const ICONS = [AppstoreOutline, ShoppingCartOutline, ShopOutline, WarningOutline, PieChartOutline, SkinOutline, ContainerOutline];
+export const ICONS = [
+  AppstoreOutline,
+  ShoppingCartOutline,
+  ShopOutline,
+  WarningOutline,
+  PieChartOutline,
+  SkinOutline,
+  ContainerOutline,
+  CheckCircleOutline,
+  CloseCircleOutline
+];

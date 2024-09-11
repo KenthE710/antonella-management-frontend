@@ -71,4 +71,14 @@ export class ClienteService {
       })
     );
   }
+
+  complete(id: number): Observable<ICliente> {
+    return this.http.get<ICliente>(BACKEND_API.customers.cliente.complete.url(id)).pipe(
+      serviceDefault({
+        schema: ClienteSchema,
+        i18nErrorMessage: this.i18n.getI18Value('services.cliente.complete.error'),
+        logger: this.logger
+      })
+    );
+  }
 }

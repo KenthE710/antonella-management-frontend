@@ -15,9 +15,19 @@ import { combineLatest, map } from 'rxjs';
   selector: 'product-add-form',
   imports: [ProductFormComponent, NzSpinModule],
   standalone: true,
-  template: ` <nz-spin [nzSpinning]="productoIsLoading">
-    <product-form #pf (CreateOrUpdateFinish)="CreateOrUpdateFinish($event)" [productFormData]="productFormData" />
-  </nz-spin>`
+  template: `
+    @if (!productoIsLoading) {
+      <product-form
+        #pf
+        (CreateOrUpdateFinish)="CreateOrUpdateFinish($event)"
+        [productFormData]="productFormData"
+        [productoFileList]="productImg"
+        [productoCoverFileList]="productCover"
+      />
+    } @else {
+      <nz-spin [nzSpinning]="true" />
+    }
+  `
 })
 export class EditProductFormComponent implements OnInit {
   private readonly ref = inject(NzDrawerRef);
@@ -32,6 +42,9 @@ export class EditProductFormComponent implements OnInit {
 
   productFormData: ProductFormData | undefined;
   productoIsLoading = false;
+
+  productCover: any[] = [];
+  productImg: any[] = [];
 
   CreateOrUpdateFinish(producto: Partial<IProducto>): void {
     this.ref.close();
@@ -63,9 +76,9 @@ export class EditProductFormComponent implements OnInit {
             };
 
             if (img.is_cover) {
-              this.productForm.addCover(imgFile);
+              this.productCover.push(imgFile);
             } else {
-              this.productForm.addImgFile(imgFile);
+              this.productImg.push(imgFile);
             }
           }
         },

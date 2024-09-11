@@ -7,6 +7,8 @@ export * from './utils/format_error_msg';
 export * from './utils/zod';
 export * from './utils/get-changed-values.util';
 export * from './utils/duracion_a_fecha.util';
+export * from './utils/validations';
+export * from './utils/fecha.util';
 
 // Module
 export * from './shared-imports';

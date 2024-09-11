@@ -9,7 +9,7 @@ import { z } from 'zod';
  */
 const noIdProductoTipoSchema = {
   nombre: z.string(),
-  descripcion: z.string()
+  descripcion: z.string().nullable().optional()
 };
 export const ProductoTipoSchema = z.object({ id: z.number(), ...noIdProductoTipoSchema });
 export type IProductoTipo = z.infer<typeof ProductoTipoSchema>;

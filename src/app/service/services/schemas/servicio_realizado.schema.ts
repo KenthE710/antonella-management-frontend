@@ -8,8 +8,8 @@ export const BaseServicioRealizadoSchema = z.object({
   cliente: z.number(),
   servicio: z.number(),
   fecha: z.string().nullable().optional(),
-  pagado: z.string(),
-  finalizado: z.boolean()
+  pagado: z.string().optional(),
+  finalizado: z.boolean().nullable().optional()
 });
 export const ServicioRealizadoSchema = BaseServicioRealizadoSchema.extend({ id: z.number() });
 export const ServicioRealizadoAllSchema = ServicioRealizadoSchema.omit({ cliente: true, servicio: true }).extend({

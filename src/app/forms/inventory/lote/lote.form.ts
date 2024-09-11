@@ -1,6 +1,6 @@
-import { Component, inject, Output, EventEmitter, Input } from '@angular/core';
+import { Component, inject, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { I18NService } from '@core';
-import { SFSchema, DelonFormModule, SFSelectWidgetSchema, SFNumberWidgetSchema } from '@delon/form';
+import { SFSchema, DelonFormModule, SFSelectWidgetSchema, SFNumberWidgetSchema, SFLayout } from '@delon/form';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { INoIdLote } from '@service/inventory/lote/schemas/lote.schema';
 import { ProductService } from '@service/inventory/product/producto.service';
@@ -10,14 +10,16 @@ import { map } from 'rxjs';
   selector: 'lote-form',
   standalone: true,
   imports: [DelonFormModule],
-  template: ` <sf #sf [schema]="schema" [mode]="formData ? 'edit' : 'default'" [formData]="formData" (formSubmit)="formSubmit($event)" />`
+  template: ` <sf #sf [schema]="schema" [formData]="formData" (formSubmit)="formSubmit($event)" [layout]="layout" />`
 })
-export class LoteFormComponent {
+export class LoteFormComponent implements OnInit {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly productService = inject(ProductService);
 
   @Input() formData?: INoIdLote;
   @Output() private readonly submit = new EventEmitter<INoIdLote>();
+
+  layout: SFLayout = 'horizontal';
 
   schema: SFSchema = {
     properties: {
@@ -63,6 +65,11 @@ export class LoteFormComponent {
     }
   };
 
+  ngOnInit(): void {
+    if (this.formData) {
+      this.layout = 'vertical';
+    }
+  }
   formSubmit(values: any) {
     const lote: INoIdLote = {
       ...values,

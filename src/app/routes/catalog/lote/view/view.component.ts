@@ -5,7 +5,7 @@ import { SVModule } from '@delon/abc/sv';
 import { ALAIN_I18N_TOKEN, I18nPipe } from '@delon/theme';
 import { LoteService } from '@service/inventory/lote/lote.service';
 import { ILoteView } from '@service/inventory/lote/schemas/lote.schema';
-import { formatErrorMsg } from '@shared';
+import { formatDateFromString, formatErrorMsg, relativeDateToNowFromString } from '@shared';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzGridModule } from 'ng-zorro-antd/grid';
@@ -64,5 +64,17 @@ export class ViewLoteComponent implements OnInit {
         this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.lote.individual.get.error'), err));
       }
     });
+  }
+
+  formatDate(date?: string | null): string {
+    try {
+      if (!date) return '';
+      const formatDate = formatDateFromString(date);
+      const relativeFormatDate = relativeDateToNowFromString(date, this.i18n.getDateLocale());
+
+      return `${formatDate} (${relativeFormatDate})`;
+    } catch (error) {
+      return '';
+    }
   }
 }

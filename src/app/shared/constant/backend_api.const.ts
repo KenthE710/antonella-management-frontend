@@ -125,6 +125,9 @@ export const BACKEND_API = {
       },
       productos_mas_utilizados: {
         url: () => API.inventory('stats', 'v1').concat('productos_mas_utilizados/')
+      },
+      lotes_cerca_de_expirar: {
+        url: () => API.inventory('stats', 'v1').concat('lotes_cerca_de_expirar/')
       }
     },
     lote: {
@@ -157,6 +160,9 @@ export const BACKEND_API = {
       },
       selector: {
         url: () => API.customers('cliente', 'v1').concat('selector/')
+      },
+      complete: {
+        url: (id: number) => API.customers('cliente', 'v1').concat(`${id}/`).concat('complete/')
       }
     }
   },
@@ -174,6 +180,12 @@ export const BACKEND_API = {
       },
       search: {
         url: () => API.staff('personal', 'v1').concat('search/')
+      },
+      state: {
+        url: () => API.staff('personal', 'v1').concat('state/')
+      },
+      complete: {
+        url: (id: number) => API.staff('personal', 'v1').concat(`${id}/`).concat('complete/')
       }
     }
   },
@@ -191,6 +203,30 @@ export const BACKEND_API = {
       },
       selector: {
         url: () => API.services('servicio', 'v1').concat('selector/')
+      },
+      state: {
+        url: () => API.services('servicio', 'v1').concat('state/')
+      },
+      delete_batch: {
+        url: () => API.services('servicio', 'v1').concat('delete_batch/')
+      },
+      view: {
+        url: (id: number) => API.services('servicio', 'v1').concat(`${id}/`).concat('view/')
+      }
+    },
+    servicio_img: {
+      url: (id?: number) => {
+        let url = API.services('servicio_img', 'v1');
+        if (id) {
+          url = url.concat(`${id}/`);
+        }
+        return url;
+      },
+      by_servicio: {
+        url: (id: number) => API.services('servicio_img', 'v1').concat(`by_servicio/${id}/`)
+      },
+      assign_servicio: {
+        url: () => API.services('servicio_img', 'v1').concat('assign_servicio/')
       }
     },
     servicio_realizado: {
@@ -206,6 +242,9 @@ export const BACKEND_API = {
       },
       grid: {
         url: () => API.services('servicio_realizado', 'v1').concat('grid/')
+      },
+      update_finalizado_batch: {
+        url: () => API.services('servicio_realizado', 'v1').concat('update_finalizado_batch/')
       }
     },
     servicio_realizado_producto: {
@@ -218,6 +257,17 @@ export const BACKEND_API = {
       },
       by_servicio_realizado: {
         url: (id: number) => API.services('servicio_realizado_producto', 'v1').concat(`by_servicio_realizado/${id}/`)
+      }
+    },
+    stats: {
+      servicios_realizados: {
+        url: () => API.services('stats', 'v1').concat('servicios-realizados/')
+      },
+      most_performed_services: {
+        url: () => API.services('stats', 'v1').concat('most-performed-services/')
+      },
+      performance_services_products: {
+        url: () => API.services('stats', 'v1').concat('performance-services-products/')
       }
     }
   },

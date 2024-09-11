@@ -2,10 +2,10 @@ import { HttpContext } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { StartupService } from '@core';
+import { I18NService, StartupService } from '@core';
 import { ReuseTabService } from '@delon/abc/reuse-tab';
 import { ALLOW_ANONYMOUS, DA_SERVICE_TOKEN, SocialOpenType, SocialService } from '@delon/auth';
-import { I18nPipe, SettingsService, _HttpClient } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, CUSTOM_ERROR, I18nPipe, SettingsService, _HttpClient } from '@delon/theme';
 import { environment } from '@env/environment';
 import { BACKEND_API } from '@shared/constant';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
@@ -48,6 +48,7 @@ export class UserLoginComponent implements OnDestroy {
   private readonly startupSrv = inject(StartupService);
   private readonly http = inject(_HttpClient);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
 
   form = inject(FormBuilder).nonNullable.group({
     userName: ['', [Validators.required]],
@@ -102,7 +103,7 @@ export class UserLoginComponent implements OnDestroy {
         },
         null,
         {
-          context: new HttpContext().set(ALLOW_ANONYMOUS, true)
+          context: new HttpContext().set(ALLOW_ANONYMOUS, true).set(CUSTOM_ERROR, true)
         }
       )
       .pipe(
@@ -111,35 +112,42 @@ export class UserLoginComponent implements OnDestroy {
           this.cdr.detectChanges();
         })
       )
-      .subscribe(res => {
-        if (res.msg !== 'ok') {
-          this.error = res.msg;
-          this.cdr.detectChanges();
-          return;
-        }
-        // Borrado de la información de multiplexación de rutas
-        this.reuseTabService?.clear();
-        // Configuración de la información del token de usuario
-        // TODO: Mock expired value
-        //res.user.expired = +new Date() + 1000 * 60 * 60;
-        this.tokenService.set({
-          ...res.user,
-          token: res.user.access_token
-        });
-        // Recuperar el contenido de StartupService, siempre asumimos que la información de la aplicación está generalmente afectada por el ámbito de autorización del usuario actual
-        this.startupSrv.load().subscribe(() => {
-          this.settingsService.setUser({
-            name: res.user.name,
-            avatar: res.user.avatar || './assets/tmp/img/avatar.jpg',
-            email: res.user.email,
+      .subscribe({
+        next: res => {
+          if (res.msg !== 'ok') {
+            this.error = res.msg;
+            this.cdr.detectChanges();
+            return;
+          }
+          // Borrado de la información de multiplexación de rutas
+          this.reuseTabService?.clear();
+          // Configuración de la información del token de usuario
+          // TODO: Mock expired value
+          //res.user.expired = +new Date() + 1000 * 60 * 60;
+          this.tokenService.set({
+            ...res.user,
             token: res.user.access_token
           });
-          let url = this.tokenService.referrer!.url || '/';
-          if (url.includes('/passport')) {
-            url = '/';
-          }
-          this.router.navigateByUrl(url);
-        });
+          // Recuperar el contenido de StartupService, siempre asumimos que la información de la aplicación está generalmente afectada por el ámbito de autorización del usuario actual
+          this.startupSrv.load().subscribe(() => {
+            this.settingsService.setUser({
+              name: res.user.name,
+              avatar: res.user.avatar || './assets/tmp/img/avatar.jpg',
+              email: res.user.email,
+              token: res.user.access_token
+            });
+            let url = this.tokenService.referrer!.url || '/';
+            if (url.includes('/passport')) {
+              url = '/';
+            }
+            this.router.navigateByUrl(url);
+          });
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.error = this.i18n.getI18Value('services.login.error');
+          this.cdr.detectChanges();
+        }
       });
   }
 

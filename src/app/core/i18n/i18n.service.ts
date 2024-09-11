@@ -26,15 +26,15 @@ interface LangConfigData {
   delon: NzSafeAny;
 }
 
-const DEFAULT = 'es-ES';
-const LANGS: { [key: string]: LangConfigData } = {
+export const DEFAULT = 'es-ES';
+export const LANGS: { [key: string]: LangConfigData } = {
   'en-US': {
     text: 'English',
     ng: ngEn,
     zorro: zorroEnUS,
     date: dfEn,
     delon: delonEnUS,
-    abbr: '🇬🇧'
+    abbr: 'en'
   },
   'es-ES': {
     text: 'Español',
@@ -100,6 +100,10 @@ export class I18NService extends AlainI18nBaseService {
 
   getLangs(): Array<{ code: string; text: string; abbr: string }> {
     return this._langs;
+  }
+
+  getDateLocale() {
+    return this.nzI18nService.getDateLocale();
   }
 
   private _getI18Value(key: string, fallback?: string): string {

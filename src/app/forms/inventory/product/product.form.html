@@ -1,12 +1,12 @@
 @if (schema) {
   <sf
     #sf
-    [mode]="isEdit ? 'edit' : 'default'"
-    [formData]="productFormData"
     [schema]="schema"
+    [formData]="productFormData"
     (formSubmit)="formSubmit($event)"
     (formChange)="formChange()"
     [button]="submitButtonOption"
+    [layout]="layout"
   />
 }
 <ng-template #dropdownRender>

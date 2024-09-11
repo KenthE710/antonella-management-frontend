@@ -1,9 +1,11 @@
 <nz-spin [nzSpinning]="!lote">
   <div sv-container [col]="2">
     <sv [label]="'form.id.label' | i18n">{{ lote?.id }}</sv>
-    <sv [label]="'table.lote.product.label' | i18n">{{ lote!.producto.nombre.concat(' (').concat(lote!.producto.sku).concat(')') }}</sv>
-    <sv [label]="'table.lote.purchase_date.label' | i18n">{{ lote?.fe_compra }}</sv>
-    <sv [label]="'table.lote.exp_date.label' | i18n">{{ lote?.fe_exp }}</sv>
+    <sv [label]="'table.lote.product.label' | i18n" *ngIf="lote!.producto">{{
+      lote!.producto.nombre.concat(lote!.producto.sku ? ''.concat(' (', lote!.producto.sku, ')') : '')
+    }}</sv>
+    <sv [label]="'table.lote.purchase_date.label' | i18n">{{ formatDate(lote?.fe_compra) }}</sv>
+    <sv [label]="'table.lote.exp_date.label' | i18n">{{ formatDate(lote?.fe_exp) }}</sv>
     <sv [label]="'table.lote.qty.label' | i18n">{{ lote?.cant }}</sv>
     <sv [label]="'table.lote.cost.label' | i18n">{{ lote?.costo }}</sv>
     <sv [label]="'table.lote.servicios_realizados.label' | i18n">{{ lote?.servicios_Realizados }}</sv>

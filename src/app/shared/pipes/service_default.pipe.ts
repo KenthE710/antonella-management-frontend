@@ -36,7 +36,7 @@ export function serviceDefault(options: IServiceDefaultOptions): typeof identity
           !(err instanceof HttpErrorResponse) ||
           (err instanceof HttpErrorResponse && (environment?.errors?.http?.[err.status] ?? true))
         ) {
-          logger.error?.(formatErrorMsg(i18nErrorMessage, err));
+          logger.error?.(formatErrorMsg(i18nErrorMessage, err.error ?? err));
         }
 
         throw err;
