@@ -16,8 +16,8 @@ export const environment = {
     refreshTokenType: 'auth-refresh' //'re-request'
   },
   backend: {
-    host: process.env['ANT_BACKEND_HOST'] || 'http://127.0.0.1:8000',
-    api_ver: process.env['ANT_BACKEND_API_VER'] || 'v1'
+    host: 'http://127.0.0.1:8000',
+    api_ver: 'v1'
   },
   errors: {
     http: {

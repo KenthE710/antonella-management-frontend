@@ -9,8 +9,8 @@ export const environment = {
     refreshTokenType: 'auth-refresh'
   },
   backend: {
-    host: process.env['ANT_BACKEND_HOST'] || 'http://127.0.0.1:8000',
-    api_ver: process.env['ANT_BACKEND_API_VER'] || 'v1'
+    host: 'https://kencalada.pythonanywhere.com',
+    api_ver: 'v1'
   },
   errors: {
     http: {
