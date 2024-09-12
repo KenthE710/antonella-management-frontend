@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { I18NService } from '@core';
 import { STChange, STColumn, STComponent } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
-import { ALAIN_I18N_TOKEN, ModalHelper, _HttpClient } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, ModalHelper, SettingsService, _HttpClient } from '@delon/theme';
 import { ProductService } from '@service/inventory/product/producto.service';
 import { SHARED_IMPORTS } from '@shared';
 import { BACKEND_API } from '@shared/constant';
@@ -22,6 +22,7 @@ export class CatalogProductComponent implements OnInit {
   private readonly modal = inject(ModalHelper);
   private readonly msg = inject(NzMessageService);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
+  private readonly settingsService = inject(SettingsService);
   private readonly productService = inject(ProductService);
 
   @ViewChild('st') private readonly st!: STComponent;
@@ -131,6 +132,10 @@ export class CatalogProductComponent implements OnInit {
     return BACKEND_API.inventory.product.grid.url();
   }
 
+  get isAdmin() {
+    return this.settingsService.user?.admin ?? false;
+  }
+
   export() {
     this.st.filteredData.subscribe(data => {
       this.st.export(data);
@@ -157,6 +162,9 @@ export class CatalogProductComponent implements OnInit {
         {
           icon: 'edit',
           type: 'drawer',
+          iif: () => {
+            return this.isAdmin;
+          },
           drawer: {
             component: EditProductFormComponent,
             drawerOptions: {
@@ -178,6 +186,9 @@ export class CatalogProductComponent implements OnInit {
         {
           icon: 'delete',
           type: 'del',
+          iif: () => {
+            return this.isAdmin;
+          },
           pop: {
             title: this.i18n.getI18Value('popup.msg.confirm-delete'),
             okType: 'danger',

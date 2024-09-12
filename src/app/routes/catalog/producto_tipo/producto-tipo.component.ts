@@ -2,7 +2,7 @@ import { Component, ViewChild, inject } from '@angular/core';
 import { I18NService } from '@core';
 import { STColumn, STComponent } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
-import { ALAIN_I18N_TOKEN, ModalHelper, _HttpClient } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, ModalHelper, SettingsService, _HttpClient } from '@delon/theme';
 import { IProductoTipo } from '@service/inventory/product/schemas';
 import { ProductoTipoService } from '@service/inventory/producto-tipo/producto-tipo.service';
 import { formatErrorMsg, SHARED_IMPORTS } from '@shared';
@@ -23,6 +23,7 @@ export class CatalogProductoTipoComponent {
   private readonly modal = inject(ModalHelper);
   private readonly msg = inject(NzMessageService);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
+  private readonly settingsService = inject(SettingsService);
   private readonly productoTipoService = inject(ProductoTipoService);
 
   @ViewChild('st') private readonly st!: STComponent;
@@ -57,6 +58,9 @@ export class CatalogProductoTipoComponent {
         {
           icon: 'edit',
           type: 'drawer',
+          iif: () => {
+            return this.isAdmin;
+          },
           drawer: {
             component: EditProductoTipoFormComponent,
             drawerOptions: {
@@ -77,6 +81,9 @@ export class CatalogProductoTipoComponent {
         {
           icon: 'delete',
           type: 'del',
+          iif: () => {
+            return this.isAdmin;
+          },
           pop: {
             title: this.i18n.getI18Value('popup.msg.confirm-delete'),
             okType: 'danger',
@@ -105,6 +112,11 @@ export class CatalogProductoTipoComponent {
   get url() {
     return BACKEND_API.inventory.producto_tipo.grid.url();
   }
+
+  get isAdmin() {
+    return this.settingsService.user?.admin ?? false;
+  }
+
   add(): void {
     this.modal
       .create(

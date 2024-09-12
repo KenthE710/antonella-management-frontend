@@ -2,7 +2,7 @@ import { Component, ViewChild, inject } from '@angular/core';
 import { I18NService } from '@core';
 import { STColumn, STComponent } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
-import { ALAIN_I18N_TOKEN, ModalHelper, _HttpClient } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, ModalHelper, SettingsService, _HttpClient } from '@delon/theme';
 import { PersonalService } from '@service/staff/personal.service';
 import { IPersonal } from '@service/staff/schemas/personal.schema';
 import { formatErrorMsg, SHARED_IMPORTS } from '@shared';
@@ -38,6 +38,7 @@ export class PersonalTableComponent {
   private readonly modal = inject(ModalHelper);
   private readonly msg = inject(NzMessageService);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
+  private readonly settingsService = inject(SettingsService);
   private readonly personalService = inject(PersonalService);
 
   @ViewChild('st') private readonly st!: STComponent;
@@ -105,6 +106,9 @@ export class PersonalTableComponent {
         {
           icon: 'edit',
           type: 'drawer',
+          iif: () => {
+            return this.isAdmin;
+          },
           drawer: {
             component: EditPersonalFormComponent,
             drawerOptions: {
@@ -125,6 +129,9 @@ export class PersonalTableComponent {
         {
           icon: 'delete',
           type: 'del',
+          iif: () => {
+            return this.isAdmin;
+          },
           pop: {
             title: this.i18n.getI18Value('popup.msg.confirm-delete'),
             okType: 'danger',
@@ -158,6 +165,11 @@ export class PersonalTableComponent {
   get url() {
     return BACKEND_API.staff.personal.grid.url();
   }
+
+  get isAdmin() {
+    return this.settingsService.user?.admin ?? false;
+  }
+
   add(): void {
     this.modal
       .create(

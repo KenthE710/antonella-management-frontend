@@ -2,7 +2,7 @@ import { Component, ViewChild, inject } from '@angular/core';
 import { I18NService } from '@core';
 import { STChange, STColumn, STComponent, STWidthMode } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
-import { ALAIN_I18N_TOKEN, ModalHelper, _HttpClient } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, ModalHelper, SettingsService, _HttpClient } from '@delon/theme';
 import { IServicio } from '@service/services/schemas/servicio.schema';
 import { ServicioService } from '@service/services/servicio.service';
 import { convertirDuracionAFecha, formatDuration, formatErrorMsg, SHARED_IMPORTS } from '@shared';
@@ -51,6 +51,7 @@ export class ServicioTableComponent {
   private readonly modal = inject(ModalHelper);
   private readonly msg = inject(NzMessageService);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
+  private readonly settingsService = inject(SettingsService);
   private readonly servicioService = inject(ServicioService);
 
   @ViewChild('st') private readonly st!: STComponent;
@@ -213,6 +214,9 @@ export class ServicioTableComponent {
         {
           icon: 'edit',
           type: 'drawer',
+          iif: () => {
+            return this.isAdmin;
+          },
           drawer: {
             component: EditServicioFormComponent,
             drawerOptions: {
@@ -233,6 +237,9 @@ export class ServicioTableComponent {
         {
           icon: 'delete',
           type: 'del',
+          iif: () => {
+            return this.isAdmin;
+          },
           pop: {
             title: this.i18n.getI18Value('popup.msg.confirm-delete'),
             okType: 'danger',
@@ -261,6 +268,11 @@ export class ServicioTableComponent {
   get url() {
     return BACKEND_API.services.servicio.grid.url();
   }
+
+  get isAdmin() {
+    return this.settingsService.user?.admin ?? false;
+  }
+
   add(): void {
     this.modal
       .create(
