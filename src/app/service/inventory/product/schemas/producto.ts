@@ -1,8 +1,8 @@
 import { CreatePaginateResponseSchema } from '@service/schemas';
 import { z } from 'zod';
 
-import { IProductoMarca, ProductoMarcaSchema } from './producto_marca';
-import { IProductoTipo, ProductoTipoSchema } from './producto_tipo';
+import { ProductoMarcaSchema } from './producto_marca';
+import { ProductoTipoSchema } from './producto_tipo';
 
 /**
  * ========================================
@@ -27,12 +27,15 @@ export const ProductoAllSchema = z.object({
   existencias: z.number(),
   usos_restantes: z.number()
 });
+export const ProductoWithExistenciasSchema = ProductoSchema.extend({ existencias: z.number() });
+
 export const ProductoSelectorSchema = ProductoSchema.pick({ id: true, nombre: true, sku: true });
 export const ProductoOfServicioSchema = ProductoSelectorSchema.extend({ existencias: z.number() });
 export interface IProducto extends z.infer<typeof ProductoSchema> {}
 export type IProductoAll = z.infer<typeof ProductoAllSchema>;
 export type IProductoSelector = z.infer<typeof ProductoSelectorSchema>;
 export type IProductoOfServicio = z.infer<typeof ProductoOfServicioSchema>;
+export type IProductoWithExistencias = z.infer<typeof ProductoWithExistenciasSchema>;
 
 /**
  * ========================================

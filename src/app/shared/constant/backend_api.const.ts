@@ -128,6 +128,9 @@ export const BACKEND_API = {
       },
       lotes_cerca_de_expirar: {
         url: () => API.inventory('stats', 'v1').concat('lotes_cerca_de_expirar/')
+      },
+      productos_cerca_de_agotar: {
+        url: () => API.inventory('stats', 'v1').concat('productos_cerca_de_agotar/')
       }
     },
     lote: {

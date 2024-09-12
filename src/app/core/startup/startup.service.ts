@@ -110,6 +110,9 @@ export class StartupService {
         },
         rendimiento_servicios_productos: {
           limit: 5
+        },
+        productos_cerca_de_agotar: {
+          umbral: 10
         }
       }
     };

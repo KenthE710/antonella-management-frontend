@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { I18NService } from '@core';
 import { _HttpClient, ALAIN_I18N_TOKEN, SettingsService } from '@delon/theme';
 import { ILoteAll, LoteAllSchema } from '@service/inventory/lote/schemas/lote.schema';
+import { IProducto, IProductoWithExistencias, ProductoSchema, ProductoWithExistenciasSchema } from '@service/inventory/product/schemas';
 import { BACKEND_API } from '@shared/constant';
 import { serviceDefault } from '@shared/pipes';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -151,6 +152,32 @@ export class StatsService {
     } catch (err) {
       console.error(err);
       throw new Error(this.i18n.getI18Value('services.stats.performance_services_products.get.error'));
+    }
+  }
+
+  productosCercaDeAgotar(umbral?: number) {
+    try {
+      let params = new HttpParams();
+
+      try {
+        params = params.set(
+          'umbral',
+          umbral ? umbral.toString() : this.settingService.app.dashboard.productos_cerca_de_agotar.umbral.toString()
+        );
+      } catch (err) {
+        params = params.set('umbral', 10);
+      }
+
+      return this.http.get<IProductoWithExistencias[]>(BACKEND_API.inventory.stats.productos_cerca_de_agotar.url(), params).pipe(
+        serviceDefault({
+          schema: ProductoWithExistenciasSchema.array(),
+          i18nErrorMessage: this.i18n.getI18Value('services.stats.productos_cerca_de_agotar.get.error'),
+          logger: this.logger
+        })
+      );
+    } catch (err) {
+      console.error(err);
+      throw new Error(this.i18n.getI18Value('services.stats.productos_cerca_de_agotar.get.error'));
     }
   }
 }

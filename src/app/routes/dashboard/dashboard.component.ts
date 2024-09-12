@@ -4,6 +4,7 @@ import { SHARED_IMPORTS } from '@shared';
 import { graphLotesCercaDeExpirarComponent } from './graphs/lotesCercaDeExpirar.component';
 import { graphMostPerformedServicesComponent } from './graphs/most_performed_services.component';
 import { graphPerformanceServicesProductsComponent } from './graphs/performance_services_products.component';
+import { graphProductosCercaDeAgotarComponent } from './graphs/productos_cerca_de_agotar.component';
 import { graphProductosMasUtilizadosComponent } from './graphs/productos_mas_utilizados.component';
 import { graphProductosPorMarcaComponent } from './graphs/productos_por_marca.component';
 import { serviciosRealizadosStatsComponent } from './graphs/servicios_realizados.component';
@@ -22,7 +23,8 @@ import { graphValorInventarioComponent } from './graphs/valor_inventario.compone
     graphMostPerformedServicesComponent,
     graphLotesCercaDeExpirarComponent,
     graphProductosMasUtilizadosComponent,
-    graphPerformanceServicesProductsComponent
+    graphPerformanceServicesProductsComponent,
+    graphProductosCercaDeAgotarComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.style.less'

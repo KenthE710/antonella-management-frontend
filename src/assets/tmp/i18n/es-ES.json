@@ -354,6 +354,7 @@
   "services.stats.most_performed_services.get.error": "Error al obtener los servicios más realizados",
   "services.stats.lotes_cerca_de_expirar.get.error": "Error al obtener los lotes cercanos a expirar",
   "services.stats.performance_services_products.get.error": "Error al obtener el rendimiento de los servicios y productos",
+  "services.stats.productos_cerca_de_agotar.get.error": "Error al obtener los productos cercanos a agotar",
 
   "services.product.create.success": "Producto creado",
   "services.product.create.error": "Error al crear el producto",
@@ -541,6 +542,9 @@
 
   "charts.productos_mas_utilizados.title": "Productos más utilizados",
   "charts.productos_mas_utilizados.item.description": "Usos: {{}}",
+
+  "charts.productos_cerca_de_agotar.title": "Productos cercanos a agotar",
+  "charts.productos_cerca_de_agotar.item.description": "Existencias: {{}}",
 
   "charts.performance_services_products.title": "Rendimiento de servicios y productos",
   "charts.performance_services_products.column.servicios.label": "Servicios",
