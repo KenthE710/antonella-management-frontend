@@ -8,6 +8,7 @@ export const LoteSchema = z.object({
   fe_exp: z.string(),
   cant: z.number(),
   costo: z.string(),
+  motivo: z.string().nullable().optional(),
   retirado: z.boolean().optional()
 });
 export const NoIdLoteSchema = LoteSchema.omit({ id: true });
@@ -23,6 +24,7 @@ export const LoteAllSchema = z.object({
   fe_exp: z.string(),
   cant: z.number(),
   costo: z.string(),
+  motivo: z.string().nullable().optional(),
   consumido: z.boolean(),
   retirado: z.boolean(),
   state: z.number()

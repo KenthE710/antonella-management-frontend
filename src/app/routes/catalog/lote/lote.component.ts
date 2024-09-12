@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core
 import { I18NService } from '@core';
 import { STColumn, STComponent } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
-import { ALAIN_I18N_TOKEN, ModalHelper, _HttpClient } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, ModalHelper, SettingsService, _HttpClient } from '@delon/theme';
 import { LoteService } from '@service/inventory/lote/lote.service';
 import { ILote, ILoteAll } from '@service/inventory/lote/schemas/lote.schema';
 import { formatErrorMsg, SHARED_IMPORTS } from '@shared';
@@ -10,6 +10,7 @@ import { BACKEND_API } from '@shared/constant';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { AddLoteFormComponent } from './add/add.component';
+import { DeleteLoteFormComponent } from './delete.component';
 import { EditLoteFormComponent } from './edit/edit.component';
 import { ViewLoteComponent } from './view/view.component';
 
@@ -45,6 +46,7 @@ export class LoteTableComponent implements OnInit {
   private readonly modal = inject(ModalHelper);
   private readonly msg = inject(NzMessageService);
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
+  private readonly settingsService = inject(SettingsService);
   private readonly loteService = inject(LoteService);
 
   @ViewChild('numberRange', { static: true }) readonly numberRange!: TemplateRef<any>;
@@ -54,7 +56,7 @@ export class LoteTableComponent implements OnInit {
     properties: {
       no: {
         type: 'string',
-        title: '编号'
+        title: ''
       }
     }
   };
@@ -181,6 +183,9 @@ export class LoteTableComponent implements OnInit {
           {
             icon: 'edit',
             type: 'drawer',
+            iif: () => {
+              return this.isAdmin;
+            },
             drawer: {
               component: EditLoteFormComponent,
               drawerOptions: {
@@ -206,34 +211,46 @@ export class LoteTableComponent implements OnInit {
               okType: 'danger',
               icon: 'warning'
             },
+            iif: () => {
+              return this.isAdmin;
+            },
             click: (record: ILoteAll, _modal, comp) => {
               this.st.loading = true;
-              this.loteService.delete(record.id).subscribe({
-                complete: () => {
-                  //TODO: Implementar mensaje al eliminar el registro
-                  this.msg.success(
-                    this.i18n.getI18ValueTemplate(
-                      'table.notification.row.deleted',
-                      `Lote de ${record.producto.nombre} (${record.producto.sku})`
-                    )
-                  );
-                  this.st.loading = false;
-                  comp!.removeRow(record);
-                  comp!.reload();
-                },
-                error: err => {
-                  this.msg.error(
-                    formatErrorMsg(
-                      this.i18n.getI18ValueTemplate(
-                        'table.notification.row.deleted.error',
-                        `Lote de ${record.producto.nombre} (${record.producto.sku})`
-                      ),
-                      err
-                    )
-                  );
-                  this.st.loading = false;
-                }
-              });
+
+              this.modal
+                .create(
+                  DeleteLoteFormComponent,
+                  {
+                    id: record.id,
+                    onSubmit: (evento: string) => {
+                      if (evento === 'deleted') {
+                        this.msg.success(
+                          this.i18n.getI18ValueTemplate(
+                            'table.notification.row.deleted',
+                            `Lote de ${record.producto.nombre} (${record.producto.sku})`
+                          )
+                        );
+                        this.st.loading = false;
+                        comp!.removeRow(record);
+                        comp!.reload();
+                      } else if (evento === 'error') {
+                        this.msg.error(
+                          this.i18n.getI18ValueTemplate(
+                            'table.notification.row.deleted.error',
+                            `Lote de ${record.producto.nombre} (${record.producto.sku})`
+                          )
+                        );
+                        this.st.loading = false;
+                      }
+                    }
+                  },
+                  {
+                    modalOptions: {
+                      nzTitle: this.i18n.getI18Value('modal.delete.lote.title')
+                    }
+                  }
+                )
+                .subscribe();
             }
           }
         ]
@@ -244,6 +261,11 @@ export class LoteTableComponent implements OnInit {
   get url() {
     return BACKEND_API.inventory.lote.grid.url();
   }
+
+  get isAdmin() {
+    return this.settingsService.user?.admin ?? false;
+  }
+
   add(): void {
     this.modal
       .create(

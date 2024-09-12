@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { I18NService } from '@core';
 import { _HttpClient, ALAIN_I18N_TOKEN } from '@delon/theme';
@@ -42,8 +43,10 @@ export class LoteService {
       })
     );
   }
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(BACKEND_API.inventory.lote.url(id)).pipe(
+  delete(id: number, motivo = ''): Observable<void> {
+    let params = new HttpParams().set('motivo', motivo);
+
+    return this.http.delete<void>(BACKEND_API.inventory.lote.url(id), params).pipe(
       serviceDefault({
         i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
         logger: this.logger

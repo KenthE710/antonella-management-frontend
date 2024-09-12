@@ -430,6 +430,8 @@
   "form.lote.individual.update.error": "Error al enviar la solicitud para actualizar el lote",
   "form.lote.create.try": "Error al enviar la petición de creación del lote",
 
+  "form.lote.delete.motivo.label": "Motivo",
+
   "form.staff.name.label": "Nombre",
   "form.staff.lastname.label": "Apellido",
   "form.staff.card.label": "Cedula",
@@ -493,6 +495,7 @@
   "drawer.client.title": "Editar Cliente",
 
   "modal.lote.title": "Crear Lote",
+  "modal.delete.lote.title": "Eliminar Lote",
   "drawer.lote.title": "Editar Lote",
 
   "modal.staff.view.title": "Información Personal",

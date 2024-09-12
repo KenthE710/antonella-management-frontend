@@ -134,7 +134,8 @@ export class UserLoginComponent implements OnDestroy {
               name: res.user.name,
               avatar: res.user.avatar || './assets/tmp/img/avatar.jpg',
               email: res.user.email,
-              token: res.user.access_token
+              token: res.user.access_token,
+              admin: res.user.is_superuser ?? false
             });
             let url = this.tokenService.referrer!.url || '/';
             if (url.includes('/passport')) {
