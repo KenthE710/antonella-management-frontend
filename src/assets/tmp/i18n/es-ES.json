@@ -201,6 +201,8 @@
   "table.product.existencias.label": "Existencias",
   "table.product.existencias.optionalHelp.label": "Cantidad de productos en existencia",
   "table.product.usos_restantes.label": "Usos restantes",
+  "table.product.maximo.label": "Existencias máximas",
+  "table.product.minimo.label": "Existencias mínimas",
   "table.product.usos_restantes.optionalHelp.label": "Servicios aproxiamos a realizar antes de que el producto se quede sin existencias",
 
   "table.product_type.name.label": "Nombre",
@@ -300,6 +302,8 @@
   "services.lote.create.error": "Error al crear el lote",
   "services.lote.update.success": "Lote actualizado",
   "services.lote.update.error": "Error al actualizar el lote",
+  "services.lote.delete.success": "Lote eliminado",
+  "services.lote.delete.error": "Error al eliminar el lote",
   "view.lote.title": "Datos del lote",
 
   "services.cliente.complete.error": "Error al obtener los datos del cliente",

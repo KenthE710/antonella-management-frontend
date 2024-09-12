@@ -29,7 +29,7 @@ export class LoteService {
     return this.http.get<ILote>(BACKEND_API.inventory.lote.url(id)).pipe(
       serviceDefault({
         schema: LoteSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.lote.individual.get.error'),
         logger: this.logger
       })
     );
@@ -38,7 +38,7 @@ export class LoteService {
     return this.http.get<ILoteView>(BACKEND_API.inventory.lote.view.url(id)).pipe(
       serviceDefault({
         schema: LoteViewSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.lote.individual.get.error'),
         logger: this.logger
       })
     );
@@ -48,7 +48,7 @@ export class LoteService {
 
     return this.http.delete<void>(BACKEND_API.inventory.lote.url(id), params).pipe(
       serviceDefault({
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.lote.delete.error'),
         logger: this.logger
       })
     );
@@ -58,7 +58,7 @@ export class LoteService {
     return this.http.post<ILote>(BACKEND_API.inventory.lote.url(), lote).pipe(
       serviceDefault({
         schema: LoteSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.lote.create.error'),
         logger: this.logger
       })
     );
@@ -68,7 +68,7 @@ export class LoteService {
     return this.http.patch<ILote>(BACKEND_API.inventory.lote.url(id), lote).pipe(
       serviceDefault({
         schema: LoteSchema,
-        i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
+        i18nErrorMessage: this.i18n.getI18Value('services.lote.update.error'),
         logger: this.logger
       })
     );

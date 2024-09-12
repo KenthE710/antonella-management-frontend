@@ -148,6 +148,18 @@ export class ProductFormComponent implements OnInit {
           minimum: 0,
           ui: { precision: 0 } as SFNumberWidgetSchema
         },
+        maximo: {
+          type: 'integer',
+          title: this.i18n.getI18Value('table.product.maximo.label'),
+          minimum: 0,
+          ui: { precision: 0 } as SFNumberWidgetSchema
+        },
+        minimo: {
+          type: 'integer',
+          title: this.i18n.getI18Value('table.product.minimo.label'),
+          minimum: 0,
+          ui: { precision: 0 } as SFNumberWidgetSchema
+        },
         cover: {
           type: 'string',
           title: this.i18n.getI18Value('form.product.cover.label'),

@@ -17,7 +17,9 @@ const _ProductoSchema = {
   nombre: z.string(),
   sku: z.string().nullable(),
   precio: z.string().transform(_ => parseInt(_)),
-  usos_est: z.number()
+  usos_est: z.number(),
+  maximo: z.number().nullable().optional(),
+  minimo: z.number().nullable().optional()
 };
 export const ProductoSchema = z.object(_ProductoSchema);
 export const ProductoAllSchema = z.object({
@@ -49,7 +51,9 @@ export const CreateProductoDtoSchema = z.object({
   nombre: z.string(),
   sku: z.string(),
   precio: z.number().transform(_ => _.toString()),
-  usos_est: z.number()
+  usos_est: z.number(),
+  maximo: z.number().nullable().optional(),
+  minimo: z.number().nullable().optional()
 });
 export type ICreateProductoDto = z.infer<typeof CreateProductoDtoSchema>;
 
@@ -62,7 +66,9 @@ const _UpdateProductoDtoSchema = {
     .number()
     .transform(_ => _.toString())
     .optional(),
-  usos_est: z.number().optional()
+  usos_est: z.number().optional(),
+  maximo: z.number().nullable().optional(),
+  minimo: z.number().nullable().optional()
 };
 export const UpdateProductoDtoSchema = z.object(_UpdateProductoDtoSchema);
 
