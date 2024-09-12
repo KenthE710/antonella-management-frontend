@@ -1,12 +1,26 @@
 {
   "app": {
     "name": "Antonella Management",
-    "description": "Sistema de gestión para la empresa Antonella"
-  },
-  "user": {
-    "name": "Admin",
-    "avatar": "./assets/tmp/img/avatar.jpg",
-    "email": "cipchk@qq.com"
+    "description": "Sistema de gestión para la empresa Antonella",
+    "validations": {
+      "cedula_limit": 10,
+      "mobile_limit": 10
+    },
+    "dashboard": {
+      "periodo_inicial": "month",
+      "servicios_mas_realizados": {
+        "limit": 5
+      },
+      "productos_mas_utilizados": {
+        "limit": 5
+      },
+      "rendimiento_servicios_productos": {
+        "limit": 5
+      },
+      "productos_cerca_de_agotar": {
+        "umbral": 10
+      }
+    }
   },
   "menu": [
     {
