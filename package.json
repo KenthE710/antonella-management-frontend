@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng s -o",
+    "start-prod": "ng s -o --configuration production",
     "build": "npm run ng-high-memory build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

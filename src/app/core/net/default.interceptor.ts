@@ -9,7 +9,7 @@ import { ReThrowHttpError, checkStatus, getAdditionalHeaders, toLogin } from './
 import { tryRefreshToken } from './refresh-token';
 
 function handleData(injector: Injector, ev: HttpResponseBase, req: HttpRequest<any>, next: HttpHandlerFn): Observable<any> {
-  checkStatus(injector, ev);
+  // checkStatus(injector, ev);
   // Procesamiento empresarial: algunas operaciones genéricas
   switch (ev.status) {
     case 200:

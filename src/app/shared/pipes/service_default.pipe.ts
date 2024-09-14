@@ -32,13 +32,16 @@ export function serviceDefault(options: IServiceDefaultOptions): typeof identity
       catchError(err => {
         if (err instanceof z.ZodError) throw err;
 
-        if (err instanceof HttpErrorResponse && (environment?.errors?.http?.[err.status] ?? true) && err.error?.hasOwnProperty('msg')) {
-          logger.error?.(`${i18nErrorMessage}: ${err.error.msg}`);
-        } else if (
-          !(err instanceof HttpErrorResponse) ||
-          (err instanceof HttpErrorResponse && (environment?.errors?.http?.[err.status] ?? true))
-        ) {
-          logger.error?.(formatErrorMsg(i18nErrorMessage, err.error ?? err));
+        if (err instanceof HttpErrorResponse) {
+          if (environment?.errors?.http?.[err.status] ?? true) {
+            if (err.error?.hasOwnProperty('msg')) {
+              logger.error?.(formatErrorMsg(i18nErrorMessage, err.error.msg, true));
+            } else {
+              logger.error?.(formatErrorMsg(i18nErrorMessage, err.error));
+            }
+          }
+        } else {
+          logger.error?.(formatErrorMsg(i18nErrorMessage, err));
         }
 
         throw err;
