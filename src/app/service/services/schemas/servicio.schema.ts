@@ -7,8 +7,14 @@ export const BaseServicioStateSchema = z.object({
   descripcion: z.string().max(225).nullable().optional()
 });
 
+export const BaseServicioEspecialidadSchema = z.object({
+  nombre: z.string().max(100),
+  descripcion: z.string().max(225).nullable().optional()
+});
+
 export const ServicioStateSchema = BaseServicioStateSchema.extend({ id: z.number() });
 export const ServicioStateSimpleSchema = ServicioStateSchema.pick({ id: true, nombre: true });
+export const ServicioEspecialidadSchema = BaseServicioEspecialidadSchema.extend({ id: z.number() });
 
 export const ServicioSchema = z.object({
   id: z.number(),
@@ -18,14 +24,16 @@ export const ServicioSchema = z.object({
   tiempo_est: z.string().nullable().optional(),
   encargado: z.number().nullable().optional(),
   productos: z.number().array().nullable().optional(),
-  estado: z.number().nullable().optional()
+  estado: z.number().nullable().optional(),
+  especialidades: z.number().array().nullable().optional()
 });
 
 export const ServicioViewSchema = ServicioSchema.omit({ encargado: true, productos: true, estado: true }).extend({
   encargado: PersonalNamesSchema.nullable().optional(),
   productos: ProductoOfServicioSchema.array().optional(),
   estado: ServicioStateSimpleSchema.nullable().optional(),
-  disponibilidad: z.boolean()
+  disponibilidad: z.boolean(),
+  especialidades: ServicioStateSchema.pick({ id: true, nombre: true }).array()
 });
 
 export const BaseServicioImgSchema = z.object({
@@ -47,3 +55,4 @@ export type IServicioState = z.infer<typeof ServicioStateSchema>;
 export type IBaseServicioImg = z.infer<typeof BaseServicioImgSchema>;
 export type IServicioImg = z.infer<typeof servicioImgSchema>;
 export type IServicioView = z.infer<typeof ServicioViewSchema>;
+export type IServicioEspecialidad = z.infer<typeof ServicioEspecialidadSchema>;

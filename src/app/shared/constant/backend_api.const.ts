@@ -215,6 +215,9 @@ export const BACKEND_API = {
       },
       view: {
         url: (id: number) => API.services('servicio', 'v1').concat(`${id}/`).concat('view/')
+      },
+      get_especialidades: {
+        url: () => API.services('servicio', 'v1').concat('get_especialidades/')
       }
     },
     servicio_img: {

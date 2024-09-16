@@ -149,11 +149,24 @@ export class ServicioFormComponent implements OnInit {
             optionalHelp: this.i18n.getI18Value('form.servicio.time.optionalHelp.label')
           } as SFTimeWidgetSchema
         },
+        especialidades: {
+          type: 'string',
+          title: this.i18n.getI18Value('form.servicio.especialidades.label'),
+          ui: {
+            widget: 'select',
+            mode: 'multiple',
+            asyncData: () =>
+              this.servicioService.getEspecialidades().pipe(map(data => [...data.map(pt => ({ label: pt.nombre, value: pt.id }))]))
+          } as SFSelectWidgetSchema
+        },
         encargado: {
           type: 'string',
           title: this.i18n.getI18Value('form.servicio.encargado.label'),
           ui: {
             widget: 'select',
+            visibleIf: {
+              especialidades: val => val && val.length > 0
+            },
             serverSearch: true,
             searchDebounceTime: 300,
             searchLoadingText: this.i18n.getI18Value('form.search.loading'),
@@ -161,15 +174,16 @@ export class ServicioFormComponent implements OnInit {
               if (typeof q === 'number') {
                 this.itemsloading++;
               }
+              const especialidades: number[] = this.sf.getValue('/especialidades');
               return lastValueFrom(
                 (typeof q === 'number'
-                  ? this.PersonalService.get(q).pipe(
+                  ? this.PersonalService.get(q, especialidades).pipe(
                       toArray(),
                       tap(() => {
                         this.itemsloading--;
                       })
                     )
-                  : this.PersonalService.search(q)
+                  : this.PersonalService.search(q, especialidades)
                 ).pipe(map(res => res.map(i => ({ label: `${i.nombre} ${i.apellido}`, value: i.id }) as SFSchemaEnum)))
               );
             }
@@ -292,7 +306,7 @@ export class ServicioFormComponent implements OnInit {
         this.msg.success(this.i18n.getI18Value('services.producto_img.upload.success'));
         break;
       case 'error':
-        this.msg.error(this.i18n.getI18Value('services.producto_img.upload.error'));
+        this.msg.warning(this.i18n.getI18Value('services.producto_img.upload.error'));
         break;
       case 'removed':
         this.msg.success(this.i18n.getI18Value('services.producto_img.delete.success'));
@@ -340,7 +354,7 @@ export class ServicioFormComponent implements OnInit {
         catchError(() => of(false))
       );
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product.img.remove.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product.img.remove.try'), err));
       return false;
     }
   }

@@ -204,7 +204,7 @@ export class CatalogProductComponent implements OnInit {
                 this.table_loading = false;
               },
               error: err => {
-                this.msg.error(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.nombre));
+                this.msg.warning(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.nombre));
                 this.table_loading = false;
               }
             });

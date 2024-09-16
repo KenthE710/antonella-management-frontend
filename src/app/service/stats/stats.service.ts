@@ -8,6 +8,7 @@ import { BACKEND_API } from '@shared/constant';
 import { serviceDefault } from '@shared/pipes';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
+import { LoggerService } from 'src/app/core/logger.service';
 
 import { IMostPerformedServices, MostPerformedServicesSchema } from './schemas/most_performed_services.schema';
 import { IPerformanceServicesProducts, PerformanceServicesProductsSchema } from './schemas/performance_services_products.schema';
@@ -26,7 +27,8 @@ export class StatsService {
   private readonly msg = inject(NzMessageService);
   private readonly settingService = inject(SettingsService);
 
-  logger = { error: (_: any) => this.msg.error(_) };
+  private readonly loggerService = inject(LoggerService);
+  logger = { error: (_: any) => this.loggerService.error(_), warn: (_: any, titulo?: string) => this.loggerService.warn(_, titulo) };
 
   getTotalProductosPorTipo(): Observable<ITotalProductosPorTipo[]> {
     return this.http.get<ITotalProductosPorTipo[]>(BACKEND_API.inventory.stats.total_productos_por_tipo.url()).pipe(

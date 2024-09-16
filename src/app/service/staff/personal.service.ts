@@ -6,6 +6,7 @@ import { BACKEND_API } from '@shared/constant';
 import { serviceDefault } from '@shared/pipes';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
+import { LoggerService } from 'src/app/core/logger.service';
 
 import {
   INoIdPersonal,
@@ -26,15 +27,17 @@ export class PersonalService {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly msg = inject(NzMessageService);
 
-  logger = { error: (_: any) => this.msg.error(_) };
+  private readonly loggerService = inject(LoggerService);
+  logger = { error: (_: any) => this.loggerService.error(_), warn: (_: any, titulo?: string) => this.loggerService.warn(_, titulo) };
 
   /**
    * ========================================
    * CRUD
    * ========================================
    */
-  get(id: number): Observable<IPersonal> {
-    return this.http.get<IPersonal>(BACKEND_API.staff.personal.url(id)).pipe(
+  get(id: number, especialidad: number[] = []): Observable<IPersonal> {
+    let params = new HttpParams().set('especialidad', especialidad.join(','));
+    return this.http.get<IPersonal>(BACKEND_API.staff.personal.url(id), params).pipe(
       serviceDefault({
         schema: PersonalSchema,
         i18nErrorMessage: this.i18n.getI18Value('services.staff.individual.get.error'),
@@ -76,8 +79,8 @@ export class PersonalService {
    * OPERATIONS
    * ========================================
    */
-  search(query = ''): Observable<IPersonal[]> {
-    const params = new HttpParams().set('q', query);
+  search(query = '', especialidad: number[] = []): Observable<IPersonal[]> {
+    const params = new HttpParams().set('q', query).set('especialidad', especialidad.join(','));
     return this.http.get<IPersonal[]>(BACKEND_API.staff.personal.search.url(), params).pipe(
       serviceDefault({
         schema: PersonalSchema.array(),

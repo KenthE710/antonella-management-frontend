@@ -7,6 +7,7 @@ import { BACKEND_API, get_paginate_params_from_page } from '@shared/constant';
 import { serviceDefault } from '@shared/pipes';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { catchError, Observable } from 'rxjs';
+import { LoggerService } from 'src/app/core/logger.service';
 
 import {
   ProductoGridPaginateResponseSchema,
@@ -41,7 +42,9 @@ import {
   ProductoTipoCreateSchema,
   ProductoTipoSchema,
   IProductoSelector,
-  ProductoSelectorSchema
+  ProductoSelectorSchema,
+  ProductoTipoSelectorSchema,
+  ProductoMarcaSelectorSchema
 } from './schemas/index';
 
 @Injectable({
@@ -52,7 +55,8 @@ export class ProductService {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly msg = inject(NzMessageService);
 
-  logger = { error: (_: any) => this.msg.error(_) };
+  private readonly loggerService = inject(LoggerService);
+  logger = { error: (_: any) => this.loggerService.error(_), warn: (_: any, titulo?: string) => this.loggerService.warn(_, titulo) };
 
   /**
    * ========================================
@@ -158,20 +162,20 @@ export class ProductService {
     );
   }
 
-  getProductoTipoSelector(): Observable<IPaginateResponse<IProductoTipoSelector>> {
+  getProductoTipoSelector(): Observable<IProductoTipoSelector[]> {
     return this.http.get(BACKEND_API.inventory.producto_tipo.selector.url()).pipe(
       serviceDefault({
-        schema: ProductoTipoSelectorPaginateResponseSchema,
+        schema: ProductoTipoSelectorSchema.array(),
         i18nErrorMessage: this.i18n.getI18Value('services.product_type.get.error'),
         logger: this.logger
       })
     );
   }
 
-  getProductoMarcaSelector(): Observable<IPaginateResponse<IProductoMarcaSelector>> {
+  getProductoMarcaSelector(): Observable<IProductoMarcaSelector[]> {
     return this.http.get(BACKEND_API.inventory.producto_marca.selector.url()).pipe(
       serviceDefault({
-        schema: ProductoMarcaSelectorPaginateResponseSchema,
+        schema: ProductoMarcaSelectorSchema.array(),
         i18nErrorMessage: this.i18n.getI18Value('services.error'),
         logger: this.logger
       })

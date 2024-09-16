@@ -6,6 +6,7 @@ import { BACKEND_API } from '@shared/constant';
 import { serviceDefault } from '@shared/pipes';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
+import { LoggerService } from 'src/app/core/logger.service';
 
 import { ILote, ILoteView, INoIdLote, LoteSchema, LoteViewSchema, NoIdLoteSchema } from './schemas/lote.schema';
 
@@ -17,7 +18,8 @@ export class LoteService {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly msg = inject(NzMessageService);
 
-  logger = { error: (_: any) => this.msg.error(_) };
+  private readonly loggerService = inject(LoggerService);
+  logger = { error: (_: any) => this.loggerService.error(_), warn: (_: any, titulo?: string) => this.loggerService.warn(_, titulo) };
 
   /**
    * ========================================
@@ -53,9 +55,9 @@ export class LoteService {
       })
     );
   }
-  create(lote: INoIdLote): Observable<ILote> {
+  create(lote: INoIdLote, force = false): Observable<ILote> {
     lote = NoIdLoteSchema.parse(lote);
-    return this.http.post<ILote>(BACKEND_API.inventory.lote.url(), lote).pipe(
+    return this.http.post<ILote>(BACKEND_API.inventory.lote.url(), { ...lote, force_save: force }).pipe(
       serviceDefault({
         schema: LoteSchema,
         i18nErrorMessage: this.i18n.getI18Value('services.lote.create.error'),
@@ -63,9 +65,9 @@ export class LoteService {
       })
     );
   }
-  update(id: number, lote: Partial<INoIdLote>): Observable<ILote> {
+  update(id: number, lote: Partial<INoIdLote>, force = false): Observable<ILote> {
     lote = NoIdLoteSchema.partial().parse(lote);
-    return this.http.patch<ILote>(BACKEND_API.inventory.lote.url(id), lote).pipe(
+    return this.http.patch<ILote>(BACKEND_API.inventory.lote.url(id), { ...lote, force_save: force }).pipe(
       serviceDefault({
         schema: LoteSchema,
         i18nErrorMessage: this.i18n.getI18Value('services.lote.update.error'),

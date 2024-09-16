@@ -6,6 +6,7 @@ import { BACKEND_API } from '@shared/constant';
 import { serviceDefault } from '@shared/pipes';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
+import { LoggerService } from 'src/app/core/logger.service';
 
 import { BaseServicioImgSchema, IBaseServicioImg, IServicioImg, servicioImgSchema } from './schemas/servicio.schema';
 
@@ -17,7 +18,8 @@ export class ServicioImgService {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly msg = inject(NzMessageService);
 
-  logger = { error: (_: any) => this.msg.error(_) };
+  private readonly loggerService = inject(LoggerService);
+  logger = { error: (_: any) => this.loggerService.error(_), warn: (_: any, titulo?: string) => this.loggerService.warn(_, titulo) };
 
   /**
    * ========================================

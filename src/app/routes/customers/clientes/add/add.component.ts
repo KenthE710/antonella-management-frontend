@@ -31,11 +31,11 @@ export class AddClienteFormComponent {
           this.modal.destroy();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.client.create.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.client.create.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.client.create.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.client.create.try'), err));
     }
   }
 }

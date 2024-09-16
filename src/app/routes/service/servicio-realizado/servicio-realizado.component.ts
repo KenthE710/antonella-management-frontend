@@ -139,7 +139,7 @@ export class ServicioRealizadoTableComponent {
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(
+                this.msg.warning(
                   formatErrorMsg(this.i18n.getI18Value('table.notification.servicio_realizado.change_state.unfinish.error'), err)
                 );
                 this.st.loading = false;
@@ -165,7 +165,7 @@ export class ServicioRealizadoTableComponent {
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(
+                this.msg.warning(
                   formatErrorMsg(this.i18n.getI18Value('table.notification.servicio_realizado.change_state.finish.error'), err)
                 );
                 this.st.loading = false;
@@ -207,7 +207,7 @@ export class ServicioRealizadoTableComponent {
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(
+                this.msg.warning(
                   formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.servicio.nombre), err)
                 );
                 this.st.loading = false;

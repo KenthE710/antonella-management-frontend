@@ -35,7 +35,7 @@ export class EditProductoMarcaFormComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del producto marca');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
     try {
@@ -44,11 +44,11 @@ export class EditProductoMarcaFormComponent implements OnInit {
           this.productoMarca = _marca;
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product_brand.individual.get.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product_brand.individual.get.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product_brand.individual.get.error'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product_brand.individual.get.error'), err));
     }
   }
 
@@ -69,11 +69,11 @@ export class EditProductoMarcaFormComponent implements OnInit {
           this.ref.close();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product_brand.update.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product_brand.update.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product_brand.individual.update.error'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product_brand.individual.update.error'), err));
     }
   }
 }

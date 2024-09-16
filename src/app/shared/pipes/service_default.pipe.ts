@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { catchError, pipe } from 'rxjs';
 import type { identity } from 'rxjs';
@@ -12,7 +11,8 @@ const serviceDefaultOptions = z.object({
   i18nErrorMessage: z.string().optional(),
   logger: z
     .object({
-      error: z.function().args(z.string()).returns(z.void()).optional()
+      error: z.function().args(z.string()).returns(z.void()).optional(),
+      warn: z.any().optional()
     })
     .optional()
 });
@@ -30,19 +30,9 @@ export function serviceDefault(options: IServiceDefaultOptions): typeof identity
   if (i18nErrorMessage && logger?.error) {
     pipes.push(
       catchError(err => {
-        if (err instanceof z.ZodError) throw err;
+        if (!environment.production) console.error('[serviceDefault]', err);
 
-        if (err instanceof HttpErrorResponse) {
-          if (environment?.errors?.http?.[err.status] ?? true) {
-            if (err.error?.hasOwnProperty('msg')) {
-              logger.error?.(formatErrorMsg(i18nErrorMessage, err.error.msg, true));
-            } else {
-              logger.error?.(formatErrorMsg(i18nErrorMessage, err.error));
-            }
-          }
-        } else {
-          logger.error?.(formatErrorMsg(i18nErrorMessage, err));
-        }
+        logger.warn?.(formatErrorMsg(i18nErrorMessage, err, { use_html: true }));
 
         throw err;
       })

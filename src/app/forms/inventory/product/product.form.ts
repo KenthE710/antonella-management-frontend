@@ -109,11 +109,9 @@ export class ProductFormComponent implements OnInit {
           title: this.i18n.getI18Value('form.product.type.label'),
           ui: {
             widget: 'select',
-            dropdownRender: this.dropdownRender,
+            //dropdownRender: this.dropdownRender,
             asyncData: () =>
-              this.productService
-                .getProductoTipoSelector()
-                .pipe(map(data => [...data.results.map(pt => ({ label: pt.nombre, value: pt.id }))]))
+              this.productService.getProductoTipoSelector().pipe(map(data => [...data.map(pt => ({ label: pt.nombre, value: pt.id }))]))
           } as SFSelectWidgetSchema
         },
         marca: {
@@ -122,7 +120,7 @@ export class ProductFormComponent implements OnInit {
           ui: {
             widget: 'select',
             asyncData: () =>
-              this.productService.getProductoMarcaSelector().pipe(map(data => data.results.map(pt => ({ label: pt.nombre, value: pt.id }))))
+              this.productService.getProductoMarcaSelector().pipe(map(data => data.map(pt => ({ label: pt.nombre, value: pt.id }))))
           } as SFSelectWidgetSchema
         },
         nombre: {
@@ -277,17 +275,17 @@ export class ProductFormComponent implements OnInit {
           this.associateImgs();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product.create.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product.create.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product.create.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product.create.try'), err));
     }
   }
 
   update({ cover, imgs, ...values }: Record<string, unknown>) {
     if (!this.productFormData?.id) {
-      this.msg.error(this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del producto'));
+      this.msg.warning(this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del producto'));
       return;
     }
 
@@ -310,11 +308,11 @@ export class ProductFormComponent implements OnInit {
           this.CreateOrUpdateFinish.emit(this.producto!);
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product.update.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product.update.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product.update.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product.update.try'), err));
     }
   }
 
@@ -333,11 +331,11 @@ export class ProductFormComponent implements OnInit {
               this.CreateOrUpdateFinish.emit(this.producto!);
             },
             error: err => {
-              this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.producto_img.many.asociate.error'), err));
+              this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.producto_img.many.asociate.error'), err));
             }
           });
       } catch (err: any) {
-        this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product.img.upload.try'), err));
+        this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product.img.upload.try'), err));
       }
     }
   }
@@ -349,7 +347,7 @@ export class ProductFormComponent implements OnInit {
         catchError(() => of(false))
       );
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product.img.remove.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product.img.remove.try'), err));
       return false;
     }
   }
@@ -360,7 +358,7 @@ export class ProductFormComponent implements OnInit {
         this.msg.success(this.i18n.getI18Value('services.producto_img.upload.success'));
         break;
       case 'error':
-        this.msg.error(this.i18n.getI18Value('services.producto_img.upload.error'));
+        this.msg.warning(this.i18n.getI18Value('services.producto_img.upload.error'));
         break;
       case 'removed':
         this.msg.success(this.i18n.getI18Value('services.producto_img.delete.success'));

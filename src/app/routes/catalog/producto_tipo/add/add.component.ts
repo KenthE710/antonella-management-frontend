@@ -31,11 +31,11 @@ export class AddProductoTipoFormComponent {
           this.modal.destroy();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product_type.create.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product_type.create.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product_type.create.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product_type.create.try'), err));
     }
   }
 }

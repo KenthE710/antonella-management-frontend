@@ -14,7 +14,7 @@ import { I18NService, defaultInterceptor, provideStartup, DEFAULT as I18N_DEFAUL
 import { provideCellWidgets } from '@delon/abc/cell';
 import { provideSTWidgets } from '@delon/abc/st';
 import { authSimpleInterceptor, provideAuth } from '@delon/auth';
-import { provideSFConfig } from '@delon/form';
+import { provideSFConfig, SFButton } from '@delon/form';
 import { AlainProvideLang, provideAlain, en_US as delonLang } from '@delon/theme';
 import { AlainConfig } from '@delon/util/config';
 import { environment } from '@env/environment';
@@ -47,6 +47,11 @@ const alainConfig: AlainConfig = {
     page: {
       total: '{{range[0]}} - {{range[1]}} de {{total}}'
     }
+  },
+  sf: {
+    button: {
+      submit: 'Enviar'
+    } as SFButton
   },
   pageHeader: {
     homeI18n: 'app.home'

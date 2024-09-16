@@ -234,7 +234,7 @@ export class LoteTableComponent implements OnInit {
                         comp!.removeRow(record);
                         comp!.reload();
                       } else if (evento === 'error') {
-                        this.msg.error(
+                        this.msg.warning(
                           this.i18n.getI18ValueTemplate(
                             'table.notification.row.deleted.error',
                             `Lote de ${record.producto.nombre} (${record.producto.sku})`

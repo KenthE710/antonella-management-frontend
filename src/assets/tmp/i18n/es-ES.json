@@ -4,6 +4,8 @@
   "no": "No",
   "stocks": "Existencias",
   "custom": "Personalizado",
+  "warning": "Advertencia",
+  "confirm": "Confirmar",
 
   "menu.search.placeholder": "Buscar personas, archivos, fotos...",
   "menu.fullscreen": "Pantalla completa",
@@ -330,6 +332,7 @@
   "services.servicio.get.states.error": "Error al obtener los estados del servicio",
   "services.servicio.delete_batch.error": "Error al eliminar los servicios",
   "services.servicio.view.error": "Error al obtener los datos del servicio",
+  "services.servicio.get_especialidades.error": "Error al obtener las especialidades del servicio",
   "view.servicio.title": "Datos del servicio",
   "view.servicio.gallery.title": "Galería de imágenes",
   "view.servicio.products.title": "Productos a usar",
@@ -435,6 +438,8 @@
   "form.lote.individual.update.error": "Error al enviar la solicitud para actualizar el lote",
   "form.lote.create.try": "Error al enviar la petición de creación del lote",
 
+  "form.lote.create_anyway.content.title": "¿Está seguro de crear el lote?",
+
   "form.lote.delete.motivo.label": "Motivo",
 
   "form.staff.name.label": "Nombre",
@@ -462,6 +467,7 @@
   "form.servicio.state.label": "Estado",
   "form.servicio.encargado.label": "Encargado",
   "form.servicio.productos.label": "Productos",
+  "form.servicio.especialidades.label": "Especialidades",
   "form.servicio.state.badge.active.label": "Activo",
   "form.servicio.state.badge.inactive.label": "Inactivo",
   "form.servicio.individual.get.error": "Error al enviar la solicitud para obtener el servicio",

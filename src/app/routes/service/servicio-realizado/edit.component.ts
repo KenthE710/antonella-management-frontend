@@ -40,7 +40,7 @@ export class ServicioRealizadoEditFormComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del servicio');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
     try {
@@ -54,11 +54,11 @@ export class ServicioRealizadoEditFormComponent implements OnInit {
             };
           },
           error: err => {
-            this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.servicio.individual.get.error'), err));
+            this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.servicio.individual.get.error'), err));
           }
         });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.servicio.individual.get.error'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.servicio.individual.get.error'), err));
     }
   }
 
@@ -80,12 +80,12 @@ export class ServicioRealizadoEditFormComponent implements OnInit {
           this.ref.close();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.servicio.update.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.servicio.update.error'), err));
         }
       });
       */
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.servicio.individual.update.error'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.servicio.individual.update.error'), err));
     }
   }
 }

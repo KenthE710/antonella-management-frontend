@@ -40,7 +40,7 @@ export class DeleteLoteFormComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del lote');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
   }
@@ -58,7 +58,7 @@ export class DeleteLoteFormComponent implements OnInit {
         }
       });
     } catch (error: any) {
-      this.msg.error(
+      this.msg.warning(
         formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', `Lote con id ${this.id}`), error)
       );
     }

@@ -45,11 +45,11 @@ export class RealizarServicioFormComponent implements OnInit {
           this.modal.destroy();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.servicio_realizado.create.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.servicio_realizado.create.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.servicio_realizado.create.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.servicio_realizado.create.try'), err));
     }
   }
 }

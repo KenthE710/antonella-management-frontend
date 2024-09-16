@@ -33,11 +33,11 @@ export class AddServicioRealizadoFormComponent {
           this.modal.destroy();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.servicio.create.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.servicio.create.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.servicio.create.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.servicio.create.try'), err));
     } */
   }
 }

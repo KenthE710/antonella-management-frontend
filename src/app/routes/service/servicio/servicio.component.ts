@@ -255,7 +255,7 @@ export class ServicioTableComponent {
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.nombre), err));
+                this.msg.warning(formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.nombre), err));
                 this.loading = false;
               }
             });
@@ -304,12 +304,12 @@ export class ServicioTableComponent {
           this.loading = false;
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('table.notification.selection.deleted.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('table.notification.selection.deleted.error'), err));
           this.loading = false;
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('table.notification.selection.deleted.error'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('table.notification.selection.deleted.error'), err));
       this.loading = false;
     }
   }

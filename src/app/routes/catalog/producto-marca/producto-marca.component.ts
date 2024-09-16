@@ -100,7 +100,7 @@ export class ProductoMarcaTableComponent {
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.nombre), err));
+                this.msg.warning(formatErrorMsg(this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', record.nombre), err));
                 this.st.loading = false;
               }
             });

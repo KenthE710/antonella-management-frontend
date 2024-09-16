@@ -145,7 +145,7 @@ export class EditProductComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del producto');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
 
@@ -195,7 +195,7 @@ export class EditProductComponent implements OnInit {
         },
         error: (err: Error) => {
           const i18n_msg = this.i18n.getI18Value('services.product.get.one.error');
-          this.msg.error(environment.production ? i18n_msg : `i18n_msg: ${err.message}`);
+          this.msg.warning(environment.production ? i18n_msg : `i18n_msg: ${err.message}`);
           this.productoIsLoading = false;
           this.sf.disabled = true;
         },
@@ -233,7 +233,7 @@ export class EditProductComponent implements OnInit {
       },
       error: err => {
         const errMsg = this.i18n.getI18Value('services.product.update.error');
-        this.msg.error(environment.production ? errMsg : `${errMsg}: ${JSON.stringify(err?.error)}`);
+        this.msg.warning(environment.production ? errMsg : `${errMsg}: ${JSON.stringify(err?.error)}`);
       }
     });
   }
@@ -251,7 +251,7 @@ export class EditProductComponent implements OnInit {
         this.msg.success(this.i18n.getI18Value('services.producto_img.upload.success'));
         break;
       case 'error':
-        this.msg.error(this.i18n.getI18Value('services.producto_img.upload.error'));
+        this.msg.warning(this.i18n.getI18Value('services.producto_img.upload.error'));
         break;
       case 'removed':
         this.msg.success(this.i18n.getI18Value('services.producto_img.delete.success'));

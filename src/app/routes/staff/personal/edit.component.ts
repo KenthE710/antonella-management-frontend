@@ -35,7 +35,7 @@ export class EditPersonalFormComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del personal');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
     try {
@@ -44,11 +44,11 @@ export class EditPersonalFormComponent implements OnInit {
           this.formData = _personal;
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.staff.individual.get.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.staff.individual.get.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.staff.individual.get.error'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.staff.individual.get.error'), err));
     }
   }
 
@@ -69,11 +69,11 @@ export class EditPersonalFormComponent implements OnInit {
           this.ref.close();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.staff.update.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.staff.update.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.staff.individual.update.error'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.staff.individual.update.error'), err));
     }
   }
 }

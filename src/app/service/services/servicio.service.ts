@@ -5,6 +5,7 @@ import { BACKEND_API } from '@shared/constant';
 import { serviceDefault } from '@shared/pipes';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
+import { LoggerService } from 'src/app/core/logger.service';
 
 import {
   IServicio,
@@ -16,7 +17,9 @@ import {
   IServicioState,
   ServicioStateSchema,
   IServicioView,
-  ServicioViewSchema
+  ServicioViewSchema,
+  IServicioEspecialidad,
+  ServicioEspecialidadSchema
 } from './schemas/servicio.schema';
 
 @Injectable({
@@ -27,7 +30,8 @@ export class ServicioService {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly msg = inject(NzMessageService);
 
-  logger = { error: (_: any) => this.msg.error(_) };
+  private readonly loggerService = inject(LoggerService);
+  logger = { error: (_: any) => this.loggerService.error(_), warn: (_: any, titulo?: string) => this.loggerService.warn(_, titulo) };
 
   /**
    * ========================================
@@ -110,6 +114,15 @@ export class ServicioService {
       serviceDefault({
         schema: ServicioViewSchema,
         i18nErrorMessage: this.i18n.getI18Value('services.servicio.view.error'),
+        logger: this.logger
+      })
+    );
+  }
+  getEspecialidades(): Observable<IServicioEspecialidad[]> {
+    return this.http.get<IServicioEspecialidad[]>(BACKEND_API.services.servicio.get_especialidades.url()).pipe(
+      serviceDefault({
+        schema: ServicioEspecialidadSchema.array(),
+        i18nErrorMessage: this.i18n.getI18Value('services.servicio.get_especialidades.error'),
         logger: this.logger
       })
     );

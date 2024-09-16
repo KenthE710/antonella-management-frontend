@@ -4,6 +4,11 @@ export const BasePersonalStateSchema = z.object({
   name: z.string().max(50)
 });
 
+export const BaseServicioStateSchema = z.object({
+  id: z.number(),
+  nombre: z.string().max(100)
+});
+
 export const PersonalStateSchema = BasePersonalStateSchema.extend({ id: z.number() });
 
 export const PersonalSchema = z.object({
@@ -15,11 +20,13 @@ export const PersonalSchema = z.object({
   telefono: z.string().max(15).nullable().optional(),
   direccion: z.string().max(255).nullable().optional(),
   fecha_nacimiento: z.string().nullable().optional(),
-  estado: z.number().nullable().optional()
+  estado: z.number().nullable().optional(),
+  especialidades: z.number().array().nullable().optional()
 });
 export const NoIdPersonalSchema = PersonalSchema.omit({ id: true });
 export const PersonalFullSchema = PersonalSchema.extend({
-  estado: PersonalStateSchema.nullable().optional()
+  estado: PersonalStateSchema.nullable().optional(),
+  especialidades: BaseServicioStateSchema.array()
 });
 
 export const PersonalNamesSchema = PersonalSchema.pick({ id: true, nombre: true, apellido: true });

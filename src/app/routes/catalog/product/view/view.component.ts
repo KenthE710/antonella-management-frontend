@@ -56,7 +56,7 @@ export class ViewProductComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del producto');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
 
@@ -75,7 +75,7 @@ export class ViewProductComponent implements OnInit {
           }
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product.get.one.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product.get.one.error'), err));
         }
       });
   }

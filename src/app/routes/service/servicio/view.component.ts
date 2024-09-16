@@ -35,6 +35,9 @@ import { combineLatest, map } from 'rxjs';
             <sv [label]="'table.servicio.encargado.label' | i18n" *ngIf="servicio.encargado">{{
               servicio.encargado.nombre.concat(' ', servicio.encargado.apellido)
             }}</sv>
+            <sv [label]="'form.servicio.especialidades.label' | i18n" *ngIf="servicio.especialidades.length">{{
+              getEspecialidadesLabel(servicio)
+            }}</sv>
             <sv [label]="'table.servicio.descripcion.label' | i18n" col="1" *ngIf="servicio.descripcion">{{ servicio.descripcion }}</sv>
           </div>
         </div>
@@ -95,7 +98,7 @@ export class ViewServicioComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del servicio');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
 
@@ -108,7 +111,7 @@ export class ViewServicioComponent implements OnInit {
           this.imgs = servicioImgs.filter(img => !img.is_cover);
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product.get.one.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product.get.one.error'), err));
         }
       });
   }
@@ -126,5 +129,9 @@ export class ViewServicioComponent implements OnInit {
       default:
         return void 0;
     }
+  }
+
+  getEspecialidadesLabel(servicio: IServicioView) {
+    return servicio.especialidades.map(_ => _.nombre).join(', ');
   }
 }

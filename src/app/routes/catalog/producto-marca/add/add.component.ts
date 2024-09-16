@@ -31,11 +31,11 @@ export class AddProductoMarcaFormComponent {
           this.modal.destroy();
         },
         error: err => {
-          this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.product_brand.create.error'), err));
+          this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.product_brand.create.error'), err));
         }
       });
     } catch (err: any) {
-      this.msg.error(formatErrorMsg(this.i18n.getI18Value('form.product_brand.create.try'), err));
+      this.msg.warning(formatErrorMsg(this.i18n.getI18Value('form.product_brand.create.try'), err));
     }
   }
 }

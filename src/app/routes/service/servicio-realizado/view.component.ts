@@ -58,7 +58,7 @@ export class ServicioRealizadoViewComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del producto');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
 
@@ -67,7 +67,7 @@ export class ServicioRealizadoViewComponent implements OnInit {
         this.servicioRealizado = _servicioRealizado;
       },
       error: err => {
-        this.msg.error(formatErrorMsg(this.i18n.getI18Value('services.servicio_realizado.individual.get.error'), err));
+        this.msg.warning(formatErrorMsg(this.i18n.getI18Value('services.servicio_realizado.individual.get.error'), err));
       }
     });
   }

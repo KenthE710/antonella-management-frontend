@@ -23,7 +23,10 @@ import { NzMessageService } from 'ng-zorro-antd/message';
         <sv [label]="'table.personal.fecha_nacimiento.label' | i18n" *ngIf="personal.fecha_nacimiento">{{
           formatDate(personal.fecha_nacimiento)
         }}</sv>
-        <sv [label]="'table.personal.estado.label' | i18n" *ngIf="personal.estado">{{ personal.estado }}</sv>
+        <sv [label]="'table.personal.estado.label' | i18n" *ngIf="personal.estado">{{ personal.estado.name }}</sv>
+        <sv [label]="'form.servicio.especialidades.label' | i18n" *ngIf="personal.especialidades.length">{{
+          getEspecialidadesLabel(personal)
+        }}</sv>
       </div>
     } @else {
       <nz-spin />
@@ -50,7 +53,7 @@ export class ViewPersonalComponent implements OnInit {
   ngOnInit(): void {
     if (!this.id) {
       const idRequiredMsg = this.i18n.getI18ValueTemplate('msg.validation.isRequired', 'Id del personal');
-      this.msg.error(idRequiredMsg);
+      this.msg.warning(idRequiredMsg);
       throw new Error(idRequiredMsg);
     }
 
@@ -61,5 +64,9 @@ export class ViewPersonalComponent implements OnInit {
 
   formatDate(date: string): string {
     return formatJustDateFromString(date);
+  }
+
+  getEspecialidadesLabel(personal: IPersonalFull) {
+    return personal.especialidades.map(_ => _.nombre).join(', ');
   }
 }

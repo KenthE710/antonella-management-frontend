@@ -124,7 +124,7 @@ export class ClienteTableComponent {
                 comp!.reload();
               },
               error: err => {
-                this.msg.error(
+                this.msg.warning(
                   formatErrorMsg(
                     this.i18n.getI18ValueTemplate('table.notification.row.deleted.error', `${record.nombre} ${record.apellido}`),
                     err

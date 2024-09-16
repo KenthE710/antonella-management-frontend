@@ -2,6 +2,7 @@ import { Component, inject, Output, EventEmitter, Input, OnInit } from '@angular
 import { I18NService } from '@core';
 import { SFSchema, DelonFormModule, SFLayout, SFSelectWidgetSchema, SFValue, FormProperty, PropertyGroup } from '@delon/form';
 import { ALAIN_I18N_TOKEN, SettingsService } from '@delon/theme';
+import { ServicioService } from '@service/services/servicio.service';
 import { PersonalService } from '@service/staff/personal.service';
 import { INoIdPersonal } from '@service/staff/schemas/personal.schema';
 import { isCedula, isMobile } from '@shared';
@@ -16,6 +17,7 @@ import { map } from 'rxjs';
 export class PersonalFormComponent implements OnInit {
   private readonly i18n = inject<I18NService>(ALAIN_I18N_TOKEN);
   private readonly personalService = inject(PersonalService);
+  private readonly servicioService = inject(ServicioService);
   private settingService = inject(SettingsService);
 
   @Input() formData?: INoIdPersonal;
@@ -74,6 +76,16 @@ export class PersonalFormComponent implements OnInit {
         type: 'string',
         title: this.i18n.getI18Value('form.staff.born_date.label'),
         format: 'date'
+      },
+      especialidades: {
+        type: 'string',
+        title: this.i18n.getI18Value('form.servicio.especialidades.label'),
+        ui: {
+          widget: 'select',
+          mode: 'multiple',
+          asyncData: () =>
+            this.servicioService.getEspecialidades().pipe(map(data => [...data.map(pt => ({ label: pt.nombre, value: pt.id }))]))
+        } as SFSelectWidgetSchema
       },
       estado: {
         type: 'string',
