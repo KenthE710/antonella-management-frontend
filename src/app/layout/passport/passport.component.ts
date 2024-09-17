@@ -16,7 +16,7 @@ import { HeaderI18nComponent } from '../basic/widgets/i18n.component';
       <div class="wrap">
         <div class="top">
           <div class="head">
-            <img class="logo" src="./assets/logo-color.svg" />
+            <img class="logo" src="./assets/logo.png" />
             <span class="title">{{ getAppName() }}</span>
           </div>
           <div class="desc">{{ getAppDescription() }}</div>

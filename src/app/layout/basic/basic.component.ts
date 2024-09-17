@@ -77,8 +77,8 @@ import { HeaderUserComponent } from './widgets/user.component';
 export class LayoutBasicComponent {
   private readonly settings = inject(SettingsService);
   options: LayoutDefaultOptions = {
-    logoExpanded: `./assets/logo.svg`,
-    logoCollapsed: `./assets/logo.svg`
+    logoExpanded: `./assets/logo.png`,
+    logoCollapsed: `./assets/logo.png`
   };
   searchToggleStatus = false;
   get user(): User {
